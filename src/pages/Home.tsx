@@ -1,91 +1,488 @@
 // src/pages/Home.tsx
 import React, { useState } from "react";
-import SearchBar from "../components/SearchBar.tsx";
-import ArtworkList from "../components/ArtworkList.tsx";
+import SearchBar from "../components/SearchBar";
+import CuratedCategories from "../components/CuratedCategories";
+import GalleriesSection from "../components/GalleriesSection";
+import SearchResults from "../components/SearchResults";
 
 const Home: React.FC = () => {
-  // For demonstration, we'll mock some artworks
-  const mockArtworks = [
-    {
-      id: "1",
-      title: "Starry Night",
-      imageUrl: "https://via.placeholder.com/200",
-      author: "Vincent van Gogh",
-      date: "1889"
-    },
-    {
-      id: "2",
-      title: "Mona Lisa",
-      imageUrl: "https://via.placeholder.com/200",
-      author: "Leonardo da Vinci",
-      date: "1503"
-    },
-    // ... more items
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 5; // Replace with real data once you fetch from an API
-
-  // Search callback (from SearchBar)
   const handleSearch = (category: string, term: string) => {
-    // TODO: integrate your real data fetching here
-    // e.g., call a function to fetch data from Europeana / The Met
-    console.log("Search triggered =>", { category, term });
-  };
-
-  // Filter and Sort (placeholder)
-  // You could add multi-select filters, date range pickers, etc.
-  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // e.g., filter by medium, date, etc.PaginationControls.tsx
-    console.log("Filter changed =>", e.target.value);
-  };
-
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // e.g., sort by newest, oldest, alphabetical
-    console.log("Sort changed =>", e.target.value);
-  };
-
-  // Pagination handlers
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
-  };
-  const handleNextPage = () => {
-    setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+    // You can eventually use 'category' and expand the search query.
+    setSearchTerm(term);
   };
 
   return (
     <div className="container mx-auto p-4">
-      {/* Central SearchBar */}
       <SearchBar onSearch={handleSearch} />
-
-      {/* Simple Filter and Sort UI */}
-      <div className="flex gap-4 justify-center my-4">
-        <select onChange={handleFilterChange} className="border rounded p-1">
-          <option value="">Filter by...</option>
-          <option value="paintings">Paintings</option>
-          <option value="sculptures">Sculptures</option>
-          <option value="photographs">Photographs</option>
-        </select>
-
-        <select onChange={handleSortChange} className="border rounded p-1">
-          <option value="">Sort by...</option>
-          <option value="newest">Newest</option>
-          <option value="oldest">Oldest</option>
-          <option value="alphabetical">Alphabetical</option>
-        </select>
-      </div>
-
-      {/* Artwork List with Pagination */}
-      <ArtworkList
-        artworks={mockArtworks}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPrev={handlePrevPage}
-        onNext={handleNextPage}
-      />
+      {searchTerm ? (
+        <SearchResults searchTerm={searchTerm} />
+      ) : (
+        <>
+          <CuratedCategories />
+          <GalleriesSection />
+        </>
+      )}
     </div>
   );
 };
 
 export default Home;
+
+
+
+
+// import React, { useState } from "react";
+// import SearchBar from "../components/SearchBar";
+// import ArtworkList from "../components/ArtworkList";
+// import CuratedCategories from "../components/CuratedCategories";
+// import GalleriesSection from "../components/GalleriesSection";
+
+// const Home: React.FC = () => {
+//   const [searchTerm, setSearchTerm] = useState("");
+
+//   const handleSearch = (category: string, term: string) => {
+//     setSearchTerm(term);
+//   };
+
+//   return (
+//     <div className="container mx-auto p-4">
+//       <SearchBar onSearch={handleSearch} />
+//       {searchTerm ? (
+//         <>
+//           <h2 className="text-xl font-semibold mt-6">
+//             Search Results for "{searchTerm}"
+//           </h2>
+//           <ArtworkList /* pass props for search results here */ />
+//         </>
+//       ) : (
+//         <>
+//           <CuratedCategories />
+//           <GalleriesSection />
+//         </>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+// // src/pages/Home.tsx
+// import React, { useState } from 'react';
+// import SearchBar from '../components/SearchBar';
+// import ArtworkList from '../components/ArtworkList';
+// import CuratedCategories from '../components/CuratedCategories';
+
+// const Home: React.FC = () => {
+//   const [searchTerm, setSearchTerm] = useState('');
+
+//   const handleSearch = (category: string, term: string) => {
+//     setSearchTerm(term);
+//   };
+
+//   return (
+//     <div className="container mx-auto p-4">
+//       <SearchBar onSearch={handleSearch} />
+//       {searchTerm ? (
+//         <>
+//           <h2 className="text-xl font-semibold mt-6">Search Results for "{searchTerm}"</h2>
+//           <ArtworkList /* pass your search results props here */ />
+//         </>
+//       ) : (
+//         <CuratedCategories />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+
+// // src/pages/Home.tsx
+// import React, { useState } from "react";
+// import SearchBar from "../components/SearchBar";
+// import ArtworkList from "../components/ArtworkList";
+// import CollectionGroup from "../components/CollectionGroup";
+
+// const PAGE_SIZE = 10;
+
+// const Home: React.FC = () => {
+//   const [searchTerm, setSearchTerm] = useState("");
+
+//   const handleSearch = (category: string, term: string) => {
+//     setSearchTerm(term);
+//   };
+
+//   return (
+//     <div className="container mx-auto p-4">
+//       <SearchBar onSearch={handleSearch} />
+
+//       {searchTerm ? (
+//         <>
+//           <h2 className="text-xl font-semibold mt-6">Search Results for "{searchTerm}"</h2>
+//           <ArtworkList /* your existing props for artwork search results */ />
+//         </>
+//       ) : (
+//         <>
+//           <h2 className="text-xl font-semibold mt-6">Collections</h2>
+//           <CollectionGroup title="Themes" query="themes" />
+//           <CollectionGroup title="Topics" query="topics" />
+//           <CollectionGroup title="Current Exhibitions" query="exhibitions" />
+//         </>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+
+
+// // src/pages/Home.tsx
+// import React, { useState, useEffect } from "react";
+// import SearchBar from "../components/SearchBar";
+// import ArtworkList from "../components/ArtworkList";
+// import CollectionCards from "../components/CollectionCards";
+
+// import { fetchMetArtworksPage } from "../api/metApi";
+// import { fetchEuropeanaArtworks } from "../api/europeanaApi"; // if you need Europeana
+
+// const PAGE_SIZE = 48;
+
+// const Home: React.FC = () => {
+//   const [artworks, setArtworks] = useState<any[]>([]);
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [searchCategory, setSearchCategory] = useState("All"); 
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [totalResults, setTotalResults] = useState(0);
+//   const [selectedApi, setSelectedApi] = useState<"europeana" | "met">("europeana");
+
+//   // Debug log whenever these change
+//   useEffect(() => {
+//     console.log(
+//       `Current API = ${selectedApi}; searchTerm="${searchTerm}"; category="${searchCategory}"; page=${currentPage}`
+//     );
+//   }, [searchTerm, currentPage, selectedApi, searchCategory]);
+
+//   // 1. Trigger data fetch on changes
+//   useEffect(() => {
+//     // If there's no search term, reset
+//     if (!searchTerm) {
+//       setArtworks([]);
+//       setTotalResults(0);
+//       return;
+//     }
+
+//     const fetchData = async () => {
+//       try {
+//         if (selectedApi === "europeana") {
+//           // If your Europeana API helper can handle category, pass it in:
+//           const { artworks: europeanaArt, totalResults } = await fetchEuropeanaArtworks(
+//             searchCategory, // or incorporate it into the query inside the helper
+//             searchTerm,
+//             currentPage,
+//             PAGE_SIZE
+//           );
+//           setArtworks(europeanaArt);
+//           setTotalResults(totalResults);
+//         } else {
+//           // The Met
+//           const { artworks: metArt, totalResults } = await fetchMetArtworksPage(
+//             searchTerm,
+//             currentPage,
+//             PAGE_SIZE
+//           );
+//           setArtworks(metArt);
+//           setTotalResults(totalResults);
+//         }
+//       } catch (err) {
+//         console.error("Error fetching data:", err);
+//       }
+//     };
+
+//     fetchData();
+//   }, [searchTerm, searchCategory, currentPage, selectedApi]);
+
+//   // 2. Handle new searches from the SearchBar
+//   const handleSearch = (category: string, term: string) => {
+//     setSearchCategory(category);
+//     setSearchTerm(term);
+//     setCurrentPage(1); // reset to first page
+//   };
+
+//   // 3. Pagination
+//   const totalPages = Math.ceil(totalResults / PAGE_SIZE);
+
+//   const handlePrevPage = () => {
+//     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+//   };
+
+//   const handleNextPage = () => {
+//     setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+//   };
+
+//   // 4. Toggle API
+//   return (
+//     <div className="container mx-auto p-4">
+//       <div className="mb-4 flex gap-4">
+//         <button
+//           onClick={() => {
+//             setSelectedApi("europeana");
+//             setCurrentPage(1);
+//           }}
+//           className={`px-4 py-2 border ${selectedApi === "europeana" ? "bg-green-200" : ""}`}
+//         >
+//           Europeana
+//         </button>
+//         <button
+//           onClick={() => {
+//             setSelectedApi("met");
+//             setCurrentPage(1);
+//           }}
+//           className={`px-4 py-2 border ${selectedApi === "met" ? "bg-green-200" : ""}`}
+//         >
+//           The Met
+//         </button>
+//       </div>
+
+//       <SearchBar onSearch={handleSearch} />
+//       <h2 className="text-xl font-semibold mt-6">Explore Curated Collections</h2>
+//       <CollectionCards />
+
+//       {/* Artwork list with pagination */}
+//       <ArtworkList
+//         artworks={artworks}
+//         currentPage={currentPage}
+//         totalPages={totalPages}
+//         onPrev={handlePrevPage}
+//         onNext={handleNextPage}
+//       />
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+// // src/pages/Home.tsx
+// import React, { useState, useEffect } from "react";
+// import SearchBar from "../components/SearchBar";
+// import ArtworkList from "../components/ArtworkList";
+
+// import { fetchEuropeanaArtworks } from "../api/europeanaApi.ts";
+// import { fetchMetArtworksPage } from "../api/metApi.ts";
+
+// const PAGE_SIZE = 10;
+
+// const Home: React.FC = () => {
+//   const [artworks, setArtworks] = useState<any[]>([]);
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [totalResults, setTotalResults] = useState(0);
+
+//   // Decide which API to call or combine them
+//   // For simplicity, let's just call Europeana or Met (we'll pick one by a toggle)
+//   const [selectedApi, setSelectedApi] = useState<"europeana" | "met">("europeana");
+
+//   // When searchTerm or currentPage changes, fetch new data
+//   useEffect(() => {
+//     if (!searchTerm) return; // skip if empty
+
+//     const fetchData = async () => {
+//       try {
+//         if (selectedApi === "europeana") {
+//           const { artworks, totalResults } = await fetchEuropeanaArtworks(searchTerm, currentPage, PAGE_SIZE);
+//           setArtworks(artworks);
+//           setTotalResults(totalResults);
+//         } else {
+//           const { artworks, totalResults } = await fetchMetArtworksPage(searchTerm, currentPage, PAGE_SIZE);
+//           setArtworks(artworks);
+//           setTotalResults(totalResults);
+//         }
+//       } catch (err) {
+//         console.error("Error fetching data:", err);
+//       }
+//     };
+
+//     fetchData();
+//   }, [searchTerm, currentPage, selectedApi]);
+
+//   const handleSearch = (category: string, term: string) => {
+//     // For now, ignore category, just set the searchTerm
+//     // (Later you can refine the query logic based on the selected category)
+//     setSearchTerm(term);
+//     setCurrentPage(1); // reset to first page
+//   };
+
+//   // Pagination
+//   const totalPages = Math.ceil(totalResults / PAGE_SIZE);
+
+//   const handlePrevPage = () => {
+//     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+//   };
+//   const handleNextPage = () => {
+//     setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+//   };
+
+//   return (
+//     <div className="container mx-auto p-4">
+//       {/* Switch which API we use */}
+//       <div className="mb-4 flex gap-4">
+//         <button
+//           onClick={() => setSelectedApi("europeana")}
+//           className={`px-4 py-2 border ${selectedApi === "europeana" ? "bg-green-200" : ""}`}
+//         >
+//           Europeana
+//         </button>
+//         <button
+//           onClick={() => setSelectedApi("met")}
+//           className={`px-4 py-2 border ${selectedApi === "met" ? "bg-green-200" : ""}`}
+//         >
+//           The Met
+//         </button>
+//       </div>
+
+//       <SearchBar onSearch={handleSearch} />
+
+//       {/* Filter and Sort placeholders here if you like */}
+//       {/* ... */}
+
+//       <ArtworkList
+//         artworks={artworks}
+//         currentPage={currentPage}
+//         totalPages={totalPages}
+//         onPrev={handlePrevPage}
+//         onNext={handleNextPage}
+//       />
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+
+// /*
+// import React, { useState } from "react";
+// import SearchBar from "../components/SearchBar.tsx";
+// import ArtworkList from "../components/ArtworkList.tsx";
+
+// const Home: React.FC = () => {
+//   // For demonstration, we'll mock some artworks
+//   const mockArtworks = [
+//     {
+//       id: "1",
+//       title: "Starry Night",
+//       imageUrl: "https://via.placeholder.com/200",
+//       author: "Vincent van Gogh",
+//       date: "1889"
+//     },
+//     {
+//       id: "2",
+//       title: "Mona Lisa",
+//       imageUrl: "https://via.placeholder.com/200",
+//       author: "Leonardo da Vinci",
+//       date: "1503"
+//     },
+//     // ... more items
+//   ];
+
+//   // Pagination states
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const totalPages = 5; // Replace with real data once you fetch from an API
+
+//   // Search callback (from SearchBar)
+//   const handleSearch = (category: string, term: string) => {
+//     // TODO: integrate your real data fetching here
+//     // e.g., call a function to fetch data from Europeana / The Met
+//     console.log("Search triggered =>", { category, term });
+//   };
+
+//   // Filter and Sort (placeholder)
+//   // You could add multi-select filters, date range pickers, etc.
+//   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     // e.g., filter by medium, date, etc.PaginationControls.tsx
+//     console.log("Filter changed =>", e.target.value);
+//   };
+
+//   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     // e.g., sort by newest, oldest, alphabetical
+//     console.log("Sort changed =>", e.target.value);
+//   };
+
+//   // Pagination handlers
+//   const handlePrevPage = () => {
+//     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+//   };
+//   const handleNextPage = () => {
+//     setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+//   };
+
+//   return (
+//     <div className="container mx-auto p-4">
+//       {/* Central SearchBar */}
+//       //<SearchBar onSearch={handleSearch} />
+
+//       {/* Simple Filter and Sort UI */}
+//       <div className="flex gap-4 justify-center my-4">
+//         <select onChange={handleFilterChange} className="border rounded p-1">
+//           <option value="">Filter by...</option>
+//           <option value="paintings">Paintings</option>
+//           <option value="sculptures">Sculptures</option>
+//           <option value="photographs">Photographs</option>
+//         </select>
+
+//         <select onChange={handleSortChange} className="border rounded p-1">
+//           <option value="">Sort by...</option>
+//           <option value="newest">Newest</option>
+//           <option value="oldest">Oldest</option>
+//           <option value="alphabetical">Alphabetical</option>
+//         </select>
+//       </div>
+
+//       {/* Artwork List with Pagination */}
+//       <ArtworkList
+//         artworks={mockArtworks}
+//         currentPage={currentPage}
+//         totalPages={totalPages}
+//         onPrev={handlePrevPage}
+//         onNext={handleNextPage}
+//       />
+//     </div>
+//   );
+// };
+
+// export default Home;
+// <div className="flex gap-4 justify-center my-4">
+// <select onChange={handleFilterChange} className="border rounded p-1">
+//   <option value="">Filter by...</option>
+//   <option value="paintings">Paintings</option>
+//   <option value="sculptures">Sculptures</option>
+//   <option value="photographs">Photographs</option>
+// </select>
+
+// <select onChange={handleSortChange} className="border rounded p-1">
+//   <option value="">Sort by...</option>
+//   <option value="newest">Newest</option>
+//   <option value="oldest">Oldest</option>
+//   <option value="alphabetical">Alphabetical</option>
+// </select>
+// </div>
+
+// {/* Artwork List with Pagination */}
+// <ArtworkList
+// artworks={mockArtworks}
+// currentPage={currentPage}
+// totalPages={totalPages}
+// onPrev={handlePrevPage}
+// onNext={handleNextPage}
+// />
+// </div>
+// );
+// };
+
+// export default Home;

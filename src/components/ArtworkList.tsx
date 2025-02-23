@@ -1,10 +1,11 @@
-// src/components/ArtworkList.tsx
+//src/components/ArtworkList.tsx
+
 import React from "react";
 import ArtworkCard from "./ArtworkCard";
 import PaginationControls from "./PaginationControls";
 
 type Artwork = {
-  id: string; // or number
+  id: string;
   title: string;
   imageUrl: string;
   author: string;
@@ -12,7 +13,7 @@ type Artwork = {
 };
 
 type ArtworkListProps = {
-  artworks: Artwork[];
+  artworks?: Artwork[]; // ✅ Make artworks optional to prevent undefined errors
   currentPage: number;
   totalPages: number;
   onPrev: () => void;
@@ -20,15 +21,18 @@ type ArtworkListProps = {
 };
 
 const ArtworkList: React.FC<ArtworkListProps> = ({
-  artworks,
+  artworks = [], // ✅ Default to an empty array
   currentPage,
   totalPages,
   onPrev,
   onNext
 }) => {
+  if (!artworks.length) {
+    return <p className="text-center text-gray-500">No artworks found.</p>;
+  }
+
   return (
     <div>
-      {/* Grid of Artworks */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {artworks.map((art) => (
           <ArtworkCard
@@ -41,7 +45,6 @@ const ArtworkList: React.FC<ArtworkListProps> = ({
         ))}
       </div>
 
-      {/* Pagination */}
       <PaginationControls
         currentPage={currentPage}
         totalPages={totalPages}

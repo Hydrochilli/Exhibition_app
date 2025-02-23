@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { TextField, Button, FormControl, InputLabel, MenuItem, Select, Box } from "@mui/material";
 
-const searchCategories = ["All", "Topic", "Author", "Keyword"];
+const searchCategories = ["All", "Topic", "Artist", "Keyword"];
 
 type SearchBarProps = {
   onSearch: (category: string, term: string) => void;
@@ -14,7 +14,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(category, term);
+    onSearch(category, term); // Pass both category & search term to parent
   };
 
   return (
@@ -40,7 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       </FormControl>
 
       <TextField
-        className="mb-2 md:mb-0"
+        className="mb-2 md:mb-0 w-full"
         label="Search..."
         variant="outlined"
         value={term}

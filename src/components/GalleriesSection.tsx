@@ -97,7 +97,7 @@ const GalleriesSection: React.FC = () => {
                 </h3>
                 {gallery.description && gallery.description.en && (
                   <p className="text-sm text-gray-600 mt-2">
-                    {gallery.description.en[0]}
+                    {gallery.description.en}
                   </p>
                 )}
               </div>
