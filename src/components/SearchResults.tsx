@@ -1,69 +1,73 @@
 // src/components/SearchResults.tsx
 import React, { useState, useEffect } from "react";
-import { fetchEuropeanaArtworks } from "../api/europeanaApi";
-import ArtworkList from "./ArtworkList";
-import PaginationControls from "./PaginationControls";
+import { fetchUnifiedSearch } from "../api/unifySearch";
+import { Artwork } from "../api/metApi"; // same Artwork interface
 
 type SearchResultsProps = {
   searchTerm: string;
-  // Optional filters can be added here later. For now we’ll just use searchTerm.
 };
 
 const SearchResults: React.FC<SearchResultsProps> = ({ searchTerm }) => {
-  const [artworks, setArtworks] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalResults, setTotalResults] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  const pageSize = 48;
-
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        // Build the query string.
-        // Later, you can append filters (e.g., "AND century:19" etc.)
-        const query = searchTerm;
-        console.log(`Fetching artworks for query: "${query}" on page ${currentPage}`);
-        const response = await fetchEuropeanaArtworks(query, currentPage, pageSize);
-        console.log("Europeana search response:", response);
-        setArtworks(response.artworks);
-        setTotalResults(response.totalResults);
-      } catch (err: any) {
-        console.error("Error fetching search results:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [searchTerm, currentPage]);
+    if (!searchTerm) return;
+    setLoading(true);
 
-  const computedTotalPages = Math.ceil(totalResults / pageSize);
+    fetchUnifiedSearch(searchTerm)
+      .then((results) => {
+        setArtworks(results);
+        setError("");
+      })
+      .catch((err) => {
+        console.error("Unified search error:", err);
+        setError(err.message || "Error occurred in unified search");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [searchTerm]);
+
+  if (!searchTerm) {
+    return <div>Please enter a search term.</div>;
+  }
+
+  if (loading) return <div>Loading search results...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
-      {loading && <div>Loading search results...</div>}
-      {error && <div>Error loading search results: {error}</div>}
-      {!loading && !error && (
-        <>
-          <h2 className="text-xl font-semibold mt-6">
-            Search Results for "{searchTerm}" (Page {currentPage} of {computedTotalPages})
-          </h2>
-          <ArtworkList
-            artworks={artworks}
-            currentPage={currentPage}
-            totalPages={computedTotalPages}
-            onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            onNext={() => setCurrentPage((prev) =>
-              prev < computedTotalPages ? prev + 1 : prev
-            )}
-          />
-        </>
+      <h2 className="text-xl font-semibold mt-6">
+        Unified Results for "{searchTerm}"
+      </h2>
+      {artworks.length === 0 ? (
+        <p>No results found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+          {artworks.map((art) => (
+            <div key={art.id} className="border p-2">
+              {art.imageUrl && (
+                <img
+                  src={art.imageUrl}
+                  alt={art.title}
+                  className="mb-2 w-full h-48 object-cover"
+                />
+              )}
+              <div className="font-semibold">{art.title}</div>
+              <div>{art.author}</div>
+              <div>{art.date}</div>
+              <div className="text-sm text-gray-500">
+                Source: {art.source}
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
 export default SearchResults;
+

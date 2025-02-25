@@ -1,8 +1,8 @@
 // src/pages/CollectionPage.tsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchEuropeanaCollectionArtworks } from "../api/europeanaApi";
-import { fetchMetArtworksPage } from "../api/metApi";
+import { searchMet } from "../api/metApi";
+
 import ArtworkList from "./ArtworkList";
 
 const CollectionPage: React.FC = () => {

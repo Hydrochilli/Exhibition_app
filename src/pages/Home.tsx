@@ -1,22 +1,105 @@
-// src/pages/Home.tsx
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import CuratedCategories from "../components/CuratedCategories";
 import GalleriesSection from "../components/GalleriesSection";
 import SearchResults from "../components/SearchResults";
 
+// We'll add a couple of filter fields: type and century.
+const FiltersSection: React.FC<{
+  onTypeChange: (value: string) => void;
+  onCenturyChange: (value: string) => void;
+  onApply: () => void;
+}> = ({ onTypeChange, onCenturyChange, onApply }) => {
+  return (
+    <div className="flex flex-col md:flex-row gap-4 justify-center my-4">
+      {/* Filter by TYPE */}
+      <div>
+        <label className="block mb-1 font-semibold">Type</label>
+        <select
+          onChange={(e) => onTypeChange(e.target.value)}
+          className="border rounded p-1"
+        >
+          <option value="">All</option>
+          <option value="IMAGE">Images only</option>
+          <option value="VIDEO">Videos only</option>
+          <option value="SOUND">Audio only</option>
+          <option value="3D">3D objects</option>
+          <option value="TEXT">Text documents</option>
+        </select>
+      </div>
+
+      {/* Filter by Century */}
+      <div>
+        <label className="block mb-1 font-semibold">Century</label>
+        <select
+          onChange={(e) => onCenturyChange(e.target.value)}
+          className="border rounded p-1"
+        >
+          <option value="">All</option>
+          <option value="16">16th Century</option>
+          <option value="17">17th Century</option>
+          <option value="18">18th Century</option>
+          <option value="19">19th Century</option>
+          <option value="20">20th Century</option>
+          <option value="21">21st Century</option>
+        </select>
+      </div>
+
+      {/* Apply button */}
+      <div className="flex items-end">
+        <button
+          onClick={onApply}
+          className="px-4 py-2 bg-green-700 text-white rounded"
+        >
+          Apply Filters
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Home: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+  const [centuryFilter, setCenturyFilter] = useState("");
 
-  const handleSearch = (category: string, term: string) => {
-    // You can eventually use 'category' and expand the search query.
+  // We'll store one "query" state that merges searchTerm + filters:
+  const [query, setQuery] = useState<string>("");
+
+  // This function is called by the SearchBar component
+  const handleSearch = (term: string) => {
     setSearchTerm(term);
+    // Optionally, reset filters if you'd like. For now we keep them as is.
+  };
+
+  // Combine all filters into a single "query" or separate object for the SearchResults
+  const applyFilters = () => {
+    // Easiest approach: Just store everything in the "query" to pass to SearchResults
+    // We'll let the SearchResults (or the API) handle how to actually apply them.
+    // For demonstration, we'll store them in a JSON-like string or 
+    // you can store them individually in state. It's up to you.
+
+    // We'll do it individually here and let SearchResults handle them as props.
+    setQuery(searchTerm.trim()); 
   };
 
   return (
     <div className="container mx-auto p-4">
       <SearchBar onSearch={handleSearch} />
-      {searchTerm ? (
+      <FiltersSection
+        onTypeChange={(value) => setTypeFilter(value)}
+        onCenturyChange={(value) => setCenturyFilter(value)}
+        onApply={applyFilters}
+      />
+      {query ? (
+        // Pass filters to SearchResults
+        <SearchResults
+          searchTerm={query}
+          typeFilter={typeFilter}
+          centuryFilter={centuryFilter}
+        />
+      ) : searchTerm ? (
+        // If user typed in a searchTerm but hasn't clicked 'Apply Filters'
         <SearchResults searchTerm={searchTerm} />
       ) : (
         <>
@@ -29,6 +112,7 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 
 
 
