@@ -1,25 +1,38 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// src/App.tsx
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
-import CollectionPage from "./components/CollectionPage";
-import Header from "./components/Header"
-import GalleriesPage from "./pages/GalleriesPage"
-import GalleryDetailPage from "./pages/GalleryDetailPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import MyGalleriesPage from "./pages/MyGalleriesPage";
+import Header from "./components/Header";
+
+import { useAuth } from "./contexts/AuthContext";
 
 const App: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
-    <>
-     <Header/>
+    <div className="font-sans min-h-screen">
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/galleries" element={<GalleriesPage />} />
-        <Route path="/set/:id" element={<GalleryDetailPage />} />
-        <Route path="/collection/:collectionId" element={<CollectionPage />} /> {/* ✅ Fix Route */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/my-galleries"
+          element={
+            isAuthenticated ? <MyGalleriesPage /> : <Navigate to="/login" />
+          }
+        />
       </Routes>
-    </>
+    </div>
   );
 };
 
 export default App;
+
+
 
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Home from "./pages/Home";

@@ -1,120 +1,120 @@
+// src/pages/Home.tsx
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
+import SearchResults from "../components/SearchResults";
 import CuratedCategories from "../components/CuratedCategories";
 import GalleriesSection from "../components/GalleriesSection";
-import SearchResults from "../components/SearchResults";
-
-// We'll add a couple of filter fields: type and century.
-const FiltersSection: React.FC<{
-  onTypeChange: (value: string) => void;
-  onCenturyChange: (value: string) => void;
-  onApply: () => void;
-}> = ({ onTypeChange, onCenturyChange, onApply }) => {
-  return (
-    <div className="flex flex-col md:flex-row gap-4 justify-center my-4">
-      {/* Filter by TYPE */}
-      <div>
-        <label className="block mb-1 font-semibold">Type</label>
-        <select
-          onChange={(e) => onTypeChange(e.target.value)}
-          className="border rounded p-1"
-        >
-          <option value="">All</option>
-          <option value="IMAGE">Images only</option>
-          <option value="VIDEO">Videos only</option>
-          <option value="SOUND">Audio only</option>
-          <option value="3D">3D objects</option>
-          <option value="TEXT">Text documents</option>
-        </select>
-      </div>
-
-      {/* Filter by Century */}
-      <div>
-        <label className="block mb-1 font-semibold">Century</label>
-        <select
-          onChange={(e) => onCenturyChange(e.target.value)}
-          className="border rounded p-1"
-        >
-          <option value="">All</option>
-          <option value="16">16th Century</option>
-          <option value="17">17th Century</option>
-          <option value="18">18th Century</option>
-          <option value="19">19th Century</option>
-          <option value="20">20th Century</option>
-          <option value="21">21st Century</option>
-        </select>
-      </div>
-
-      {/* Apply button */}
-      <div className="flex items-end">
-        <button
-          onClick={onApply}
-          className="px-4 py-2 bg-green-700 text-white rounded"
-        >
-          Apply Filters
-        </button>
-      </div>
-    </div>
-  );
-};
 
 const Home: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
-  const [centuryFilter, setCenturyFilter] = useState("");
+  const [century, setCentury] = useState("");
+  const [department, setDepartment] = useState("");
+  const [selectedApi, setSelectedApi] = useState("All");
 
-  // We'll store one "query" state that merges searchTerm + filters:
-  const [query, setQuery] = useState<string>("");
+  const [query, setQuery] = useState("");
 
-  // This function is called by the SearchBar component
+  // Called by <SearchBar>
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    // Optionally, reset filters if you'd like. For now we keep them as is.
   };
 
-  // Combine all filters into a single "query" or separate object for the SearchResults
-  const applyFilters = () => {
-    // Easiest approach: Just store everything in the "query" to pass to SearchResults
-    // We'll let the SearchResults (or the API) handle how to actually apply them.
-    // For demonstration, we'll store them in a JSON-like string or 
-    // you can store them individually in state. It's up to you.
+  // Filters section
+  function FiltersSection() {
+    // "Apply Filters" sets 'query' so that <SearchResults> is shown with filters
+    const applyFilters = () => {
+      setQuery(searchTerm.trim());
+    };
 
-    // We'll do it individually here and let SearchResults handle them as props.
-    setQuery(searchTerm.trim()); 
-  };
+    return (
+      <div className="flex flex-col md:flex-row gap-4 justify-center my-4">
+        {/* Century */}
+        <div>
+          <label className="block mb-1 font-semibold">Century</label>
+          <select
+            value={century}
+            onChange={(e) => setCentury(e.target.value)}
+            className="border rounded p-1"
+          >
+            <option value="">All</option>
+            <option value="16">16th Century</option>
+            <option value="17">17th Century</option>
+            <option value="18">18th Century</option>
+            <option value="19">19th Century</option>
+            <option value="20">20th Century</option>
+            <option value="21">21st Century</option>
+          </select>
+        </div>
+
+        {/* Department */}
+        <div>
+          <label className="block mb-1 font-semibold">Department</label>
+          <select
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            className="border rounded p-1"
+          >
+            <option value="">All</option>
+            <option value="European Painting">European Painting</option>
+            <option value="Greek and Roman Art">Greek and Roman Art</option>
+            <option value="Islamic Art">Islamic Art</option>
+          </select>
+        </div>
+
+        {/* API Source */}
+        <div>
+          <label className="block mb-1 font-semibold">Source</label>
+          <select
+            value={selectedApi}
+            onChange={(e) => setSelectedApi(e.target.value)}
+            className="border rounded p-1"
+          >
+            <option value="All">All APIs</option>
+            <option value="Met">The Met</option>
+            <option value="Cleveland">Cleveland</option>
+          </select>
+        </div>
+
+        {/* Apply button */}
+        <div className="flex items-end">
+          <button
+            onClick={applyFilters}
+            className="px-4 py-2 bg-green-700 text-white rounded"
+          >
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4">
       <SearchBar onSearch={handleSearch} />
-      <FiltersSection
-        onTypeChange={(value) => setTypeFilter(value)}
-        onCenturyChange={(value) => setCenturyFilter(value)}
-        onApply={applyFilters}
-      />
+      <FiltersSection />
+
       {query ? (
-        // Pass filters to SearchResults
+        // If user pressed "Apply Filters"
         <SearchResults
           searchTerm={query}
-          typeFilter={typeFilter}
-          centuryFilter={centuryFilter}
+          century={century}
+          department={department}
+          selectedApi={selectedApi}
         />
       ) : searchTerm ? (
-        // If user typed in a searchTerm but hasn't clicked 'Apply Filters'
+        // If user typed a term but hasn't clicked "Apply"
         <SearchResults searchTerm={searchTerm} />
       ) : (
-        <>
+        // No search => curated home content
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           <CuratedCategories />
           <GalleriesSection />
-        </>
+        </div>
       )}
     </div>
   );
 };
 
 export default Home;
-
-
-
 
 
 // import React, { useState } from "react";

@@ -1,54 +1,69 @@
 // src/api/metApi.ts
+import { Artwork } from "./ArtworkTypes"; 
+// Or wherever your Artwork interface lives
 
-import axios from "axios";
-
-/**
- * We'll define a shared Artwork type (or interface),
- * so that both APIs return a consistent shape.
- */
-export interface Artwork {
-  id: string;
-  title: string;
-  imageUrl: string;
-  author: string;
-  date: string;
-  source: "MET" | "CLEVELAND";
+/** Options object for MET search */
+export interface MetSearchOptions {
+  q: string;           // search term
+  hasImages?: boolean; // if user wants only items with images
+  dateBegin?: number;  // e.g. 1800
+  dateEnd?: number;    // e.g. 1899
 }
 
-const MET_BASE_URL = "https://collectionapi.metmuseum.org/public/collection/v1";
-
-/**
- * Search The Met for a given term (e.g. "van gogh").
- * No API key required.
+/** Minimal example of a fetchFromMet function. 
+ *  This fetches the object IDs from /search and returns an array of Artwork. 
  */
-export const searchMet = async (searchTerm: string): Promise<Artwork[]> => {
-  // 1) Hit the Met search endpoint to get objectIDs
-  const { data: searchData } = await axios.get(`${MET_BASE_URL}/search`, {
-    params: {
-      q: searchTerm,
-      hasImages: true, // Only objects with images
-    },
-  });
+export async function fetchFromMet(options: MetSearchOptions): Promise<Artwork[]> {
+  // 1) Build your query string
+  const params = new URLSearchParams();
+  params.set("q", options.q);
+  if (options.hasImages) {
+    params.set("hasImages", "true");
+  }
+  if (typeof options.dateBegin === "number" && typeof options.dateEnd === "number") {
+    params.set("dateBegin", options.dateBegin.toString());
+    params.set("dateEnd", options.dateEnd.toString());
+  }
 
-  if (!searchData.objectIDs) return [];
+  // 2) Hit the MET search endpoint
+  const searchUrl = `https://collectionapi.metmuseum.org/public/collection/v1/search?${params.toString()}`;
+  const searchRes = await fetch(searchUrl);
+  if (!searchRes.ok) {
+    console.error("MET search error", searchRes.status);
+    return [];
+  }
 
-  // 2) Limit how many results we fetch details for (e.g. up to 20)
-  const limitedIDs = searchData.objectIDs.slice(0, 20);
+  const searchData = await searchRes.json() as {
+    objectIDs?: number[];
+    total: number;
+  };
 
-  // 3) For each objectID, fetch object details
+  if (!searchData.objectIDs || searchData.objectIDs.length === 0) {
+    return [];
+  }
+
+  // 3) For each object ID, fetch detail
   const artworks: Artwork[] = [];
-  for (let id of limitedIDs) {
-    const { data: detailData } = await axios.get(`${MET_BASE_URL}/objects/${id}`);
-    artworks.push({
+  for (const objectId of searchData.objectIDs.slice(0, 50)) { 
+    // Limit to 50 to avoid huge fetch loops, or adjust as you like
+    const detailUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`;
+    const detailRes = await fetch(detailUrl);
+    if (!detailRes.ok) continue;
+    const detailData = await detailRes.json() as any;
+
+    // 4) Construct your Artwork object
+    const art: Artwork = {
       id: String(detailData.objectID),
       title: detailData.title || "Untitled",
-      imageUrl: detailData.primaryImageSmall || "",
       author: detailData.artistDisplayName || "Unknown",
       date: detailData.objectDate || "",
+      imageUrl: detailData.primaryImageSmall || "",
       source: "MET",
-    });
+      // If you want to handle your century logic or other fields, do it here
+    };
+
+    artworks.push(art);
   }
 
   return artworks;
-};
-export default searchMet
+}
