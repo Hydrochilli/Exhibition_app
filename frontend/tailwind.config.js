@@ -1,11 +1,12 @@
-/** @type {import('@tailwindcss/postcss').Config} */
-module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+// tailwind.config.js
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
   },
   plugins: [],
 };
+
+export default config;
