@@ -5,7 +5,7 @@ type FacetItem = {
   id: string;
   title: string;
   description: string;
-  // You might also have a 'count' field if available.
+
 };
 
 type FacetSectionProps = {
@@ -21,8 +21,7 @@ const FacetSection: React.FC<FacetSectionProps> = ({ title, items }) => {
         {items.map((item) => (
           <div key={item.id} className="p-2 border rounded hover:bg-gray-100 cursor-pointer">
             <span className="font-semibold">{item.title}</span>
-            {/* Optionally, if you have a count: */}
-            {/* <span className="text-xs text-gray-500 ml-2">({item.count})</span> */}
+        
           </div>
         ))}
       </div>

@@ -8,6 +8,8 @@ const Header = () => {
     <header className="flex justify-between p-4 bg-gray-900 text-white">
       <Link to="/" className="text-xl font-bold">Exhibition App</Link>
       <nav className="flex items-center gap-4">
+      <Link to="/temporary-collection" className="px-4 py-2 bg-gray-700 text-white rounded">
+         Temporary Collection</Link>  
         {user ? (
           <>
             <Link to="/profile" className="hover:underline">My Collections</Link>

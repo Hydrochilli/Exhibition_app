@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchUnifiedSearch } from "../api/unifySearch";
 import PaginationControls from "./PaginationControls";
+import ArtworkCard from "./ArtworkCard"; 
 
 type Artwork = {
   id: string;
@@ -20,18 +21,13 @@ type SearchResultsProps = {
 
 const ITEMS_PER_PAGE = 48;
 
-const SearchResults: React.FC<SearchResultsProps> = ({
-  searchTerm,
-  century = "",
-  department = "",
-  selectedApi = "All",
-}) => {
+const SearchResults: React.FC<SearchResultsProps> = ({ searchTerm, century = "", department = "", selectedApi = "All" }) => {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [sortOption, setSortOption] = useState("title-asc"); // Default sorting
+  const [sortOption, setSortOption] = useState("title-asc");
 
   useEffect(() => {
     if (!searchTerm) return;
@@ -54,51 +50,26 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   if (!searchTerm) return <div>Please enter a search term.</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
-  // Helper function to parse dates for sorting
-  function parseDate(dateStr: string): number {
-    if (!dateStr || dateStr.toLowerCase() === "unknown") return Infinity; // Missing dates sorted last
-
-    // Match BC dates (e.g., "500 BC" → -500)
-    const bcMatch = dateStr.match(/(\d+)\s*BC/i);
-    if (bcMatch) return -parseInt(bcMatch[1], 10);
-
-    // Match AD dates (e.g., "1500", "2023")
-    const adMatch = dateStr.match(/\b(\d{3,4})\b/);
-    if (adMatch) return parseInt(adMatch[1], 10);
-
-    return Infinity; // Fallback for unrecognized dates
-  }
-
-  // Helper function to format dates nicely
-  function formatDate(dateStr: string): string {
-    if (!dateStr || dateStr.toLowerCase() === "unknown") return "Date Unknown";
-
-    const bcMatch = dateStr.match(/(\d+)\s*BC/i);
-    if (bcMatch) return `${bcMatch[1]} BC`;
-
-    const adMatch = dateStr.match(/\b(\d{3,4})\b/);
-    if (adMatch) return `${adMatch[1]} AD`;
-
-    return dateStr; // If it's already readable, keep it
-  }
-
   // Sorting Function
   const sortedArtworks = [...artworks].sort((a, b) => {
+    const parseDate = (dateStr: string): number => {
+      if (!dateStr || dateStr.toLowerCase() === "unknown") return Infinity;
+      const bcMatch = dateStr.match(/(\d+)\s*BC/i);
+      if (bcMatch) return -parseInt(bcMatch[1], 10);
+      const adMatch = dateStr.match(/\b(\d{3,4})\b/);
+      if (adMatch) return parseInt(adMatch[1], 10);
+      return Infinity;
+    };
+
     switch (sortOption) {
       case "title-asc":
         return a.title.localeCompare(b.title);
       case "title-desc":
         return b.title.localeCompare(a.title);
-      case "date-asc": {
-        const dateA = parseDate(a.date);
-        const dateB = parseDate(b.date);
-        return dateA - dateB;
-      }
-      case "date-desc": {
-        const dateA = parseDate(a.date);
-        const dateB = parseDate(b.date);
-        return dateB - dateA;
-      }
+      case "date-asc":
+        return parseDate(a.date) - parseDate(b.date);
+      case "date-desc":
+        return parseDate(b.date) - parseDate(a.date);
       case "source-asc":
         return a.source.localeCompare(b.source);
       case "source-desc":
@@ -113,20 +84,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-xl font-semibold mt-6">
-        Results for "{searchTerm}"
-      </h2>
+      <h2 className="text-xl font-semibold mt-6">Results for "{searchTerm}"</h2>
 
-      {/* Sorting & Filters */}
+      {/* Sorting Options */}
       <div className="flex flex-col md:flex-row gap-4 justify-center my-4">
-        {/* Sort by */}
         <div>
           <label className="block mb-1 font-semibold">Sort By</label>
-          <select
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-            className="border rounded p-1"
-          >
+          <select value={sortOption} onChange={(e) => setSortOption(e.target.value)} className="border rounded p-1">
             <option value="title-asc">Title (A-Z)</option>
             <option value="title-desc">Title (Z-A)</option>
             <option value="date-desc">Date (Newest First)</option>
@@ -137,36 +101,16 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         </div>
       </div>
 
-      {/* Search Results */}
+      {/* Search Results Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         {paginatedResults.map((art) => (
-          <div key={art.id} className="border p-2 transition-transform duration-200 hover:scale-105">
-            {art.imageUrl ? (
-              <img
-                src={art.imageUrl}
-                alt={art.title}
-                className="mb-2 w-full h-48 object-cover transition-opacity duration-500"
-              />
-            ) : (
-              <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                No Image
-              </div>
-            )}
-            <div className="font-semibold">{art.title}</div>
-            <div>{art.author}</div>
-            <div>{formatDate(art.date)}</div> {/* ✅ Improved date formatting */}
-            <div className="text-sm text-gray-500">Source: {art.source}</div>
-          </div>
+          <ArtworkCard key={art.id} artwork={art} />
         ))}
       </div>
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+        <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
       )}
 
       {loading && <p className="text-gray-500 text-center">Loading more results...</p>}

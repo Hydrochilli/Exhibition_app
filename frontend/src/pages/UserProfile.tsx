@@ -1,10 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Avatar, List, ListItem, Button } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
+type Gallery = {
+  id: string;
+  title: string;
+  description: string;
+  created_at: string;
+};
+
 const UserProfile: React.FC = () => {
-  const { user } = useAuth(); // Assuming user context exists
+  const { user } = useAuth();
+  const [galleries, setGalleries] = useState<Gallery[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!user) return;
+
+    async function fetchGalleries() {
+      try {
+        const response = await fetch(`http://localhost:3001/api/galleries/user/${user.id}`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        if (!response.ok) throw new Error("Failed to fetch galleries");
+
+        const data = await response.json();
+        setGalleries(data);
+      } catch (err) {
+        console.error("Error fetching galleries:", err);
+        setError("Could not load collections.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchGalleries();
+  }, [user]); // Now updates when user logs in
 
   if (!user) return <div>Please log in to view your profile.</div>;
 
@@ -12,11 +45,11 @@ const UserProfile: React.FC = () => {
     <div className="container mx-auto p-4 grid gap-6">
       {/* User Info Card */}
       <Card className="p-4 shadow-lg">
-        <CardContent>
+        <CardContent className="text-center">
           <Avatar src={user.avatarUrl} alt={user.username} sx={{ width: 80, height: 80, margin: "auto" }} />
-          <Typography variant="h5" align="center" className="mt-2">{user.name || user.username}</Typography>
-          <Typography variant="body1" align="center">{user.email}</Typography>
-          <Typography variant="body2" align="center" color="textSecondary">{user.city || "Location not set"}</Typography>
+          <Typography variant="h5" className="mt-2">{user.name || user.username}</Typography>
+          <Typography variant="body1">{user.email}</Typography>
+          <Typography variant="body2" color="textSecondary">{user.city || "Location not set"}</Typography>
           <Button component={Link} to="/edit-profile" variant="contained" color="primary" className="mt-3">Edit Profile</Button>
         </CardContent>
       </Card>
@@ -25,16 +58,23 @@ const UserProfile: React.FC = () => {
       <Card className="p-4 shadow-lg">
         <CardContent>
           <Typography variant="h6">Saved Galleries</Typography>
-          {user.galleries.length > 0 ? (
+
+          {loading ? (
+            <Typography color="textSecondary">Loading galleries...</Typography>
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
+          ) : galleries.length > 0 ? (
             <List>
-              {user.galleries.map((gallery) => (
+              {galleries.map((gallery) => (
                 <ListItem key={gallery.id} component={Link} to={`/gallery/${gallery.id}`} className="hover:bg-gray-100 cursor-pointer">
-                  {gallery.name}
+                  <Typography>{gallery.title}</Typography>
                 </ListItem>
               ))}
             </List>
           ) : (
-            <Typography>No galleries saved. <Link to="/curate">Start curating!</Link></Typography>
+            <Typography>
+              No galleries saved. <Link to="/">Start curating!</Link>
+            </Typography>
           )}
         </CardContent>
       </Card>
@@ -43,3 +83,4 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
+

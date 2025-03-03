@@ -12,7 +12,6 @@ const GalleriesSection: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [thumbnailsUpdated, setThumbnailsUpdated] = useState<boolean>(false);
 
-  // Fetch public galleries on mount.
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -28,7 +27,6 @@ const GalleriesSection: React.FC = () => {
     fetchData();
   }, []);
 
-  // Once galleries are loaded, update missing thumbnails only once.
   useEffect(() => {
     if (galleries.length > 0 && !thumbnailsUpdated) {
       const updateThumbnails = async () => {
