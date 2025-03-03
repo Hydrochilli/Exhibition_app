@@ -1,69 +1,48 @@
-// src/pages/LoginPage.tsx
 import React, { useState } from "react";
+import { TextField, Button, Typography, Card, CardContent } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
+const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
     try {
-      await login(email, password);
-      navigate("/my-galleries");
+      await login(credentials.email, credentials.password);
+      navigate("/profile");
     } catch (err: any) {
-      console.error("Login error", err);
-      setError(err.message || "Login failed");
+      setError(err.message || "Invalid credentials");
     }
-  }
+  };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-4 border border-gray-300 rounded">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+    <div className="container mx-auto p-4 flex justify-center">
+      <Card className="w-full max-w-md p-4 shadow-lg">
+        <CardContent>
+          <Typography variant="h5" align="center" gutterBottom>Login</Typography>
+          {error && <Typography color="error">{error}</Typography>}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div>
-          <label className="block mb-1 font-semibold" htmlFor="email">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            className="w-full border p-2 rounded"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+          <form onSubmit={handleSubmit}>
+            <TextField fullWidth margin="normal" name="email" label="Email" type="email" required onChange={handleChange} />
+            <TextField fullWidth margin="normal" name="password" label="Password" type="password" required onChange={handleChange} />
 
-        <div>
-          <label className="block mb-1 font-semibold" htmlFor="password">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="w-full border p-2 rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-green-600 text-white py-2 px-4 rounded"
-        >
-          Login
-        </button>
-      </form>
+            <Button type="submit" variant="contained" color="primary" fullWidth className="mt-3">Login</Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
-}
+};
+
+export default LoginPage;

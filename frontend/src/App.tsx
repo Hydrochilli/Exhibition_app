@@ -7,7 +7,7 @@ import RegisterPage from "./pages/RegisterPage";
 import MyGalleriesPage from "./pages/MyGalleriesPage";
 import Header from "./components/Header";
 import "./index.css"; 
-
+import Profile from "./pages/Profile";
 
 import { useAuth } from "./contexts/AuthContext";
 
@@ -19,6 +19,7 @@ const App: React.FC = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route

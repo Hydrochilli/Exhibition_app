@@ -1,13 +1,21 @@
-// src/routes/galleryRoutes.ts
-import { Router } from "express";
-import { requireAuth } from "../middleware/authMiddleware";
-import { getGalleries, createGallery, addArtworkToGallery } from "../controllers/galleryController";
+import { Router, RequestHandler } from "express";
+import { requireAuth } from "../middlewares/authMiddleware";
+import { getGalleries, createGallery, addArtworkToGallery, getUserGalleries } from "../controllers/galleryController";
 
 const router = Router();
 
-// All these routes require auth
-router.get("/", requireAuth, getGalleries);
-router.post("/", requireAuth, createGallery);
-router.post("/:galleryId/artworks", requireAuth, addArtworkToGallery);
+router.get("/user", requireAuth, getUserGalleries);
+
+router.get("/", requireAuth as RequestHandler, async (req, res) => {
+  await getGalleries(req, res);
+});
+
+router.post("/", requireAuth as RequestHandler, async (req, res) => {
+  await createGallery(req, res);
+});
+
+router.post("/:galleryId/artworks", requireAuth as RequestHandler, async (req, res) => {
+  await addArtworkToGallery(req, res);
+});
 
 export default router;

@@ -1,5 +1,6 @@
 // src/services/clevelandService.ts
-import fetch from "node-fetch";
+import fetch, { Response } from "node-fetch";
+
 
 type Artwork = {
   id: string;

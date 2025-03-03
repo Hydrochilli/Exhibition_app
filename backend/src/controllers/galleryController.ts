@@ -2,6 +2,18 @@
 import { Request, Response } from "express";
 import { pool } from "../config/db";
 
+export async function getUserGalleries(req: Request, res: Response) {
+  try {
+    const userId = (req as any).user.userId; // Extract from JWT middleware
+    const result = await pool.query("SELECT id, title, thumbnail FROM galleries WHERE user_id = $1", [userId]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching user galleries:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
 export async function getGalleries(req: Request, res: Response) {
   try {
     const userId = (req as any).userId;

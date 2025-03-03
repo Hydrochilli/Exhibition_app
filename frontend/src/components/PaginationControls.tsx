@@ -1,42 +1,50 @@
-// src/components/PaginationControls.tsx
 import React from "react";
 
-type PaginationControlsProps = {
-  currentPage: number;
-  totalPages: number;
-  onPrev: () => void;
-  onNext: () => void;
-};
-
-const PaginationControls: React.FC<PaginationControlsProps> = ({
-  currentPage,
-  totalPages,
-  onPrev,
-  onNext
-}) => {
+const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
   return (
-    <div className="flex justify-center items-center gap-4 mt-4">
+    <div className="flex justify-center items-center mt-6 space-x-2">
+      {/* First Page */}
       <button
-        onClick={onPrev}
+        className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
+        onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
-        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
       >
-        Prev
+        ⏮ First
       </button>
 
-      <span>
+      {/* Previous Page */}
+      <button
+        className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        ◀ Prev
+      </button>
+
+      {/* Current Page Info */}
+      <span className="px-4 py-2 text-lg font-semibold">
         Page {currentPage} of {totalPages}
       </span>
 
+      {/* Next Page */}
       <button
-        onClick={onNext}
+        className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
+        onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
       >
-        Next
+        Next ▶
+      </button>
+
+      {/* Last Page */}
+      <button
+        className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
+        onClick={() => onPageChange(totalPages)}
+        disabled={currentPage === totalPages}
+      >
+        ⏭ Last
       </button>
     </div>
   );
 };
 
-export default PaginationControls; // <-- must be here
+export default PaginationControls;
