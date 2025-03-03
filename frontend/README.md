@@ -1,54 +1,89 @@
-# React + TypeScript + Vite
+# Exhibition Curation App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+The **Exhibition Curation App** is a web application designed for users to search, collect, and curate artwork from multiple online museum collections. Users can browse artwork, save pieces to a temporary collection, and create personal galleries once logged in.
 
-Currently, two official plugins are available:
+## Features
+- 🔍 **Search Artwork**: Retrieve artworks from sources like The Met and Cleveland Museum.
+- 📌 **Temporary Collection**: Add items to a collection without logging in (session-based storage).
+- 🏛 **User Collections**: Registered users can save collections as permanent galleries.
+- 🎨 **User Profile**: View saved galleries and manage personal details.
+- 🖼 **Gallery Detail View**: Browse and interact with saved collections.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup and Installation
 
-## Expanding the ESLint configuration
+### **Prerequisites**
+- [Node.js](https://nodejs.org/) (Latest LTS version recommended)
+- [PostgreSQL](https://www.postgresql.org/) (Database setup required)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### **Backend Setup**
+1. **Clone the repository**
+   ```sh
+   git clone https://github.com/your-repo/exhibition-app.git
+   cd exhibition-app/backend
+   ```
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
+3. **Configure environment variables**
+   Create a `.env` file in the `backend/` directory:
+   ```env
+   DATABASE_URL=postgres://exhibition_user:yourpassword@localhost:5432/exhibition_db
+   JWT_SECRET=your_secret_key
+   ```
+4. **Setup PostgreSQL Database**
+   ```sh
+   psql -U postgres
+   CREATE DATABASE exhibition_db;
+   CREATE USER exhibition_user WITH PASSWORD 'yourpassword';
+   GRANT ALL PRIVILEGES ON DATABASE exhibition_db TO exhibition_user;
+   ```
+5. **Run database migrations**
+   ```sh
+   npm run migrate
+   ```
+6. **Start the backend server**
+   ```sh
+   npm run dev
+   ```
+   The backend should now be running on `http://localhost:3001`
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### **Frontend Setup**
+1. **Navigate to frontend directory**
+   ```sh
+   cd ../frontend
+   ```
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
+3. **Start the frontend server**
+   ```sh
+   npm run dev
+   ```
+   The frontend should now be accessible at `http://localhost:5173`
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## **How to Use**
+1. **Browse artworks** via the search bar on the homepage.
+2. **Add to Temporary Collection** by clicking **"Add to My Gallery"**.
+3. **Save Collection**: If logged in, users can permanently save collections.
+4. **View Profile & Galleries**: Navigate to **"My Collections"** to see saved galleries.
+5. **Click on a Gallery** to explore the artworks in a detailed view.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## **Upcoming Improvements**
+- 🖼 **Gallery Detail Pages**: Display saved artwork with thumbnails.
+- 📸 **Thumbnails in My Collections**: Show a preview of artworks.
+- 🔍 **Enhanced Filtering & Sorting**: Improve search functionality.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## **Contributing**
+1. **Fork the repo** and create a new branch.
+2. **Make changes** and commit with meaningful messages.
+3. **Push** to your fork and submit a **pull request**.
+
+## **License**
+This project is open-source under the **MIT License**.
+
+---
+Happy curating! 🎨🏛
+
