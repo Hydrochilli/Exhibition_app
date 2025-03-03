@@ -21,23 +21,31 @@ const UserProfile: React.FC = () => {
 
     async function fetchGalleries() {
       try {
+        console.log(`Fetching galleries for user ID: ${user.id}`);
+        
         const response = await fetch(`http://localhost:3001/api/galleries/user/${user.id}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
-        if (!response.ok) throw new Error("Failed to fetch galleries");
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Fetch error:", errorText);
+          throw new Error(`Failed to fetch galleries: ${errorText}`);
+        }
 
         const data = await response.json();
+        console.log("Galleries received:", data);
         setGalleries(data);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching galleries:", err);
-        setError("Could not load collections.");
+        setError(err.message || "Could not load collections.");
       } finally {
         setLoading(false);
       }
     }
 
     fetchGalleries();
-  }, [user]); // Now updates when user logs in
+  }, [user]);
 
   if (!user) return <div>Please log in to view your profile.</div>;
 
@@ -57,7 +65,7 @@ const UserProfile: React.FC = () => {
       {/* Saved Galleries Card */}
       <Card className="p-4 shadow-lg">
         <CardContent>
-          <Typography variant="h6">Saved Galleries</Typography>
+          <Typography variant="h6">My Collections</Typography>
 
           {loading ? (
             <Typography color="textSecondary">Loading galleries...</Typography>
@@ -73,7 +81,7 @@ const UserProfile: React.FC = () => {
             </List>
           ) : (
             <Typography>
-              No galleries saved. <Link to="/">Start curating!</Link>
+              No collections yet. <Link to="/">Start curating!</Link>
             </Typography>
           )}
         </CardContent>
@@ -83,4 +91,3 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
-

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import axios from "axios";
 import authRoutes from "./backend/src/routes/authRoutes";
 import userRoutes from "./backend/src/routes/userRoutes";
-
+import galleryRoutes from "./routes/galleryRoutes"; 
 dotenv.config(); // Load .env variables
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(express.json()); // Parse JSON request bodies
 // Authentication & User Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-
+app.use("/api/galleries", galleryRoutes);  
 /**
  * 📌 Europeana API Proxy Route
  * Example: GET http://localhost:3001/api/europeana?query=van%20gogh&rows=20&start=1&qf=TYPE:IMAGE
