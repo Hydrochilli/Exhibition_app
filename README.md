@@ -81,8 +81,7 @@ The **Exhibition Curation App** is a web application designed for users to searc
 2. **Make changes** and commit with meaningful messages.
 3. **Push** to your fork and submit a **pull request**.
 
-## **License**
-This project is open-source under the **MIT License**.
+
 
 ---
 Happy curating! 🎨🏛
