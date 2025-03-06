@@ -1,3 +1,4 @@
+// ArtworkCard.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -7,38 +8,37 @@ type Artwork = {
   author: string;
   date: string;
   imageUrl: string;
-  source: string;
+  source: string; // "Met" | "Cleveland" etc.
 };
 
-const addToTemporaryCollection = (artwork: Artwork) => {
-  let collection = JSON.parse(localStorage.getItem("temporaryCollection") || "[]");
-  collection.push(artwork);
-  localStorage.setItem("temporaryCollection", JSON.stringify(collection));
-  alert("Added to Temporary Collection!");
+type Props = {
+  artwork: Artwork;
 };
 
-const ArtworkCard: React.FC<{ artwork: Artwork }> = ({ artwork }) => {
+const ArtworkCard: React.FC<Props> = ({ artwork }) => {
   return (
-     <Link
-      to={`/artwork/${artwork.id}`}
-      className="border p-2 shadow-md rounded-lg hover:shadow-xl transition block"
-    >
-   
-      {artwork.imageUrl ? (
-        <img src={artwork.imageUrl} alt={artwork.title} className="w-full h-48 object-cover rounded-md" />
-      ) : (
-        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">No Image</div>
-      )}
-      <h3 className="text-lg font-semibold mt-2">{artwork.title}</h3>
-      <p className="text-sm text-gray-700">{artwork.author}</p>
-      <p className="text-xs text-gray-500">{artwork.date}</p>
-      <button
-        className="mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        onClick={() => addToTemporaryCollection(artwork)}
+    <div className="border p-2 shadow-md rounded-lg">
+      {/* We only want one <Link> wrapper. */}
+      <Link
+        to={`/artwork/${artwork.id}`}
+        state={{ source: artwork.source }} // pass the source in router state
+        className="block"
       >
-        Add to My Gallery
-      </button>
-    </Link>
+        {artwork.imageUrl ? (
+          <img
+            src={artwork.imageUrl}
+            alt={artwork.title}
+            className="w-full h-48 object-cover rounded-md"
+          />
+        ) : (
+          <div className="w-full h-48 bg-gray-200 flex items-center justify-center">No Image</div>
+        )}
+        <h3 className="text-lg font-semibold mt-2">{artwork.title}</h3>
+        <p className="text-sm text-gray-700">{artwork.author}</p>
+        <p className="text-xs text-gray-500">{artwork.date}</p>
+        <p className="text-xs text-gray-400">Source: {artwork.source}</p>
+      </Link>
+    </div>
   );
 };
 

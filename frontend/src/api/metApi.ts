@@ -69,21 +69,20 @@ export async function fetchFromMet(options: MetSearchOptions): Promise<Artwork[]
 
   return artworks;
 }
-export async function fetchSingleArtwork(artworkId: string): Promise<Artwork> {
-  const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${artworkId}`;
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    throw new Error(`MET detail fetch error: ${res.status}`);
+// metApi.ts
+export async function fetchSingleArtwork(objectId: string): Promise<Artwork | null> {
+  const detailUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`;
+  const detailRes = await fetch(detailUrl);
+  if (!detailRes.ok) {
+    throw new Error(`MET detail fetch error: ${detailRes.status}`);
   }
-  const data = await res.json();
-
+  const detailData = await detailRes.json();
   return {
-    id: String(data.objectID),
-    title: data.title || "Untitled",
-    author: data.artistDisplayName || "Unknown",
-    date: data.objectDate || "",
-    imageUrl: data.primaryImage || data.primaryImageSmall || "",
-    source: "MET",
+    id: String(detailData.objectID),
+    title: detailData.title || "Untitled",
+    author: detailData.artistDisplayName || "Unknown",
+    date: detailData.objectDate || "",
+    imageUrl: detailData.primaryImageSmall || "",
+    source: "Met",
   };
 }

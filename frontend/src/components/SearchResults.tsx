@@ -1,4 +1,4 @@
-// src/components/SearchResults.tsx
+// SearchResults.tsx
 import React, { useState, useEffect } from "react";
 import { fetchUnifiedSearch } from "../api/unifySearch";
 import PaginationControls from "./PaginationControls";
@@ -39,7 +39,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     if (!searchTerm) return;
 
     setLoading(true);
-    setCurrentPage(1); // Reset to page 1 if user changes search
+    setCurrentPage(1);
 
     fetchUnifiedSearch(searchTerm, century, department, selectedApi)
       .then((results) => {
@@ -57,19 +57,14 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   // Sorting
-  const parseDate = (dateStr: string): number => {
+  function parseDate(dateStr: string): number {
     if (!dateStr || dateStr.toLowerCase() === "unknown") return Infinity;
-
-    // Match "500 BC" => -500
     const bcMatch = dateStr.match(/(\d+)\s*BC/i);
     if (bcMatch) return -parseInt(bcMatch[1], 10);
-
-    // Match "1500" => 1500
     const adMatch = dateStr.match(/\b(\d{3,4})\b/);
     if (adMatch) return parseInt(adMatch[1], 10);
-
     return Infinity;
-  };
+  }
 
   const sortedArtworks = [...artworks].sort((a, b) => {
     switch (sortOption) {
@@ -90,7 +85,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     }
   });
 
-  // Paginate
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedResults = sortedArtworks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
@@ -98,7 +92,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     <div className="container mx-auto p-4">
       <h2 className="text-xl font-semibold mt-6">Results for "{searchTerm}"</h2>
 
-      {/* Sort By */}
+      {/* Sort Option */}
       <div className="flex flex-col md:flex-row gap-4 justify-center my-4">
         <div>
           <label className="block mb-1 font-semibold">Sort By</label>
@@ -117,7 +111,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         </div>
       </div>
 
-      {/* Grid of Results */}
+      {/* Results Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         {paginatedResults.map((art) => (
           <ArtworkCard key={art.id} artwork={art} />

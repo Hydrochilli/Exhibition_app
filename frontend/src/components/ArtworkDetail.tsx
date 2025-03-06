@@ -1,20 +1,47 @@
-// src/components/ArtworkDetail.tsx
+// ArtworkDetail.tsx
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { fetchSingleArtwork } from "../api/metApi";
+import { useParams, useLocation } from "react-router-dom";
+import { fetchSingleArtwork as fetchMetDetail } from "../api/metApi";
+import { fetchSingleClevelandArtwork } from "../api/clevelandApi";
+
+interface Artwork {
+  id: string;
+  title: string;
+  author: string;
+  date: string;
+  imageUrl: string;
+  source: string; // "Met" or "Cleveland"
+}
 
 const ArtworkDetail: React.FC = () => {
+  // artworkId from the URL param
   const { artworkId } = useParams<{ artworkId: string }>();
+  // to read optional router state
+  const location = useLocation() as { state?: { source?: string } };
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [artwork, setArtwork] = useState<any>(null);
+  const [artwork, setArtwork] = useState<Artwork | null>(null);
 
   useEffect(() => {
     if (!artworkId) return;
+
     (async () => {
       try {
         setLoading(true);
-        const data = await fetchSingleArtwork(artworkId);
+
+        // figure out the source:
+        // if location.state.source === "Cleveland", do Cleveland fetch
+        // else default to MET
+        const source = location.state?.source || "Met"; // fallback
+
+        let data: Artwork | null = null;
+        if (source === "Cleveland") {
+          data = await fetchSingleClevelandArtwork(artworkId);
+        } else {
+          // default to MET
+          data = await fetchMetDetail(artworkId);
+        }
         setArtwork(data);
       } catch (err) {
         console.error("Error fetching detail:", err);
@@ -23,7 +50,7 @@ const ArtworkDetail: React.FC = () => {
         setLoading(false);
       }
     })();
-  }, [artworkId]);
+  }, [artworkId, location.state?.source]);
 
   if (loading) return <div>Loading artwork detail...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -33,7 +60,6 @@ const ArtworkDetail: React.FC = () => {
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-semibold mb-4">{artwork.title}</h2>
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Large Image */}
         <div className="flex-1">
           {artwork.imageUrl ? (
             <img
@@ -45,7 +71,6 @@ const ArtworkDetail: React.FC = () => {
             <div className="bg-gray-200 p-4 text-center">No Image Available</div>
           )}
         </div>
-        {/* Right Side Info */}
         <div className="flex-1">
           <p>
             <strong>Author:</strong> {artwork.author || "Unknown"}
@@ -56,7 +81,6 @@ const ArtworkDetail: React.FC = () => {
           <p className="mt-4 text-sm text-gray-700">
             <strong>Source:</strong> {artwork.source}
           </p>
-          {/* Optionally show more detail if available */}
         </div>
       </div>
     </div>

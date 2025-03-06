@@ -1,6 +1,42 @@
 // src/api/clevelandApi.ts
 
-import { Artwork } from "./ArtworkTypes"; 
+export interface Artwork {
+  id: string;
+  title: string;
+  author: string;
+  date: string;
+  imageUrl: string;
+  source: string;
+}
+
+export async function fetchSingleClevelandArtwork(objectId: string): Promise<Artwork | null> {
+  try {
+    const url = `https://openaccess-api.clevelandart.org/api/artworks/${objectId}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`Cleveland detail fetch error: ${res.status}`);
+    }
+    const json = await res.json();
+    if (!json.data) {
+      return null;
+    }
+    const item = json.data;
+
+    // shape the result
+    return {
+      id: String(item.id),
+      title: item.title || "Untitled",
+      author: item.creators?.[0]?.description || item.creators?.[0]?.name || "Unknown",
+      date: item.creation_date || "",
+      imageUrl: item.images?.web?.url || "",
+      source: "Cleveland",
+    };
+  } catch (err) {
+    console.error("Error fetching single Cleveland item:", err);
+    return null;
+  }
+}
+
 
 interface ClevelandOptions {
   q: string;             
