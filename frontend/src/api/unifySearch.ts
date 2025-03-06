@@ -16,6 +16,5 @@ export async function fetchUnifiedSearch(
     throw new Error("Failed to fetch search results");
   }
   const data = await response.json();
-  // data.results is presumably { results: Artwork[] } from your backend
   return data.results || [];
 }

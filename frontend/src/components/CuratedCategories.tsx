@@ -33,9 +33,7 @@ interface MainCategoryProps {
 }
 
 const MainCategory: React.FC<MainCategoryProps> = ({ category }) => {
-  // For main categories, we don't display an image in the header.
-  // We only show a title and description.
-  // Then we render a grid of subcategories that have images.
+  
   const subcategories = category.subcategories || [];
   const displayedSubcategories = subcategories.slice(0, 4);
   const hasMore = subcategories.length > 4;

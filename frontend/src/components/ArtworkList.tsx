@@ -13,7 +13,7 @@ type Artwork = {
 };
 
 type ArtworkListProps = {
-  artworks?: Artwork[]; // ✅ Make artworks optional to prevent undefined errors
+  artworks?: Artwork[]; 
   currentPage: number;
   totalPages: number;
   onPrev: () => void;
@@ -21,7 +21,7 @@ type ArtworkListProps = {
 };
 
 const ArtworkList: React.FC<ArtworkListProps> = ({
-  artworks = [], // ✅ Default to an empty array
+  artworks = [], 
   currentPage,
   totalPages,
   onPrev,

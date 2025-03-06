@@ -7,7 +7,7 @@ export interface EuropeanaSearchItem {
   id: string;
   title: string;
   edmPreview?: string[];
-  // Add any additional fields that you expect to use (e.g. dataProvider, etc.)
+  
 }
 
 export interface EuropeanaSearchResponse {
@@ -21,7 +21,7 @@ export const fetchEuropeanaSearchResults = async (
   rows: number
 ): Promise<EuropeanaSearchResponse> => {
   try {
-    // Calculate start using a 1-based index (adjust if needed)
+
     const start = (page - 1) * rows + 1;
     const response = await axios.get(EUROPEANA_SEARCH_URL, {
       params: {

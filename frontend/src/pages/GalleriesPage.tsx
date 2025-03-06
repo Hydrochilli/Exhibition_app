@@ -24,14 +24,13 @@ const GalleriesPage: React.FC = () => {
   const loadGalleries = async (page: number) => {
     setLoading(true);
     try {
-      // Use the updated API call with "start" parameter.
+      
       const apiResponse = await fetchPublicGalleries(page, pageSize);
       console.log(`API response for page ${page}:`, apiResponse);
       let apiGalleries: UserSet[] = apiResponse.items || [];
       console.log(`Public galleries count on page ${page}:`, apiGalleries.length);
 
-      // On page 1, merge curated galleries.
-    //   if (page === 1 && curatedGalleryIds.length > 0) {
+    
         const curatedResults = await Promise.all(
           curatedGalleryIds.map((id) =>
             fetchGalleryById(id).catch((err) => {
@@ -53,13 +52,13 @@ const GalleriesPage: React.FC = () => {
     //   }
       setGalleries(apiGalleries);
 
-      // Log API total and compute total pages.
+      
       const apiTotal = apiResponse.total || 0;
       console.log("API total count:", apiTotal);
       const computedTotalPages = Math.ceil(apiTotal / pageSize);
       console.log("Computed total pages:", computedTotalPages);
       setTotalPages(computedTotalPages);
-      setThumbnailsUpdated(false); // Reset flag when new galleries are loaded
+      setThumbnailsUpdated(false); 
     } catch (err: any) {
       console.error("Error in loadGalleries:", err);
       setError(err.message);
@@ -72,7 +71,7 @@ const GalleriesPage: React.FC = () => {
     loadGalleries(currentPage);
   }, [currentPage]);
 
-  // Update missing thumbnails only once per page load.
+ 
   useEffect(() => {
       if (galleries.length > 0 && !thumbnailsUpdated) {
       const updateThumbnails = async () => {

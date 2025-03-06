@@ -24,7 +24,7 @@ const EntitySuggestions: React.FC<EntitySuggestionsProps> = ({ query, title }) =
       try {
         const data = await fetchEntitySuggestions(query);
         console.log(`Fetched suggestions for "${query}":`, data);
-        // Assuming that the relevant entities are in data.items
+        
         setEntities(data.items || []);
       } catch (err: any) {
         setError(err.message);

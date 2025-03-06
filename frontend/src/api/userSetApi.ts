@@ -1,38 +1,13 @@
 import axios from "axios";
 
-// The Europeana base endpoint for /set/search
-const USER_SET_SEARCH_URL = "https://api.europeana.eu/set/search"; 
-const USER_SET_DETAIL_URL = "https://api.europeana.eu/set"; // For single set, if used
-const EUROPEANA_API_KEY = "ggosewbi"
+const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_KEY;
+const EUROPEANA_BASE_URL = "https://api.europeana.eu/record/v2/search.json";
 
-// The shape of the sets returned by Europeana
-export interface UserSet {
-  id: string;
-  title: any;   // can be { en?: string[] } or string
-  description?: any;
-  thumbnail?: string;
-  type?: string;
-  visibility?: string;
-  // etc.
-}
 
-export interface UserSetResponse {
-  items: UserSet[];
-  total: number;
-}
-
-/**
- * Fetch public galleries from Europeana by calling /set/search directly.
- * This is the approach that used to work in your frontend code.
- */
-export const fetchPublicGalleries = async (
-  page = 1,
-  pageSize = 12
-): Promise<{ items: UserSet[]; total: number }> => {
+export const fetchPublicGalleries = async (page = 1, pageSize = 12) => {
   try {
-    const start = (page - 1) * pageSize; // If you used 0 for page=1
-    // EXACT or approximate usage:
-    const response = await axios.get(USER_SET_SEARCH_URL, {
+    const start = (page - 1) * pageSize;
+    const response = await axios.get("https://api.europeana.eu/set/search", {
       params: {
         wskey: EUROPEANA_API_KEY,
         query: "*",
@@ -44,13 +19,8 @@ export const fetchPublicGalleries = async (
       },
     });
 
-    // Filter for sets of type "EntityBestItemsSet"
-    const galleries = response.data.items?.filter(
-      (set: UserSet) => set.type === "EntityBestItemsSet"
-    ) || [];
-
     return {
-      items: galleries,
+      items: response.data.items || [],
       total: response.data.total || 0,
     };
   } catch (error: any) {
@@ -59,25 +29,42 @@ export const fetchPublicGalleries = async (
   }
 };
 
-/**
- * Optionally, fetch a single gallery
- */
-export const fetchGalleryById = async (galleryId: string): Promise<UserSet> => {
+export const fetchEuropeanaCollectionArtworks = async (collectionId: string) => {
   try {
-    // If your old code used full URL, handle that:
-    const numericId = galleryId.startsWith("http")
-      ? galleryId.split("/").pop()
-      : galleryId;
+    console.log("Original collection ID:", collectionId);
+
     
-    const response = await axios.get(`${USER_SET_DETAIL_URL}/${numericId}`, {
+    let normalizedId = collectionId;
+    if (collectionId.startsWith("http")) {
+      normalizedId = collectionId.split("/").pop() || "";
+    }
+    
+    console.log("Normalized collection ID:", normalizedId);
+
+    const response = await axios.get("https://api.europeana.eu/record/v2/search.json", {
       params: {
-        wskey: EUROPEANA_API_KEY,
-        profile: "standard",
+        wskey: import.meta.env.VITE_EUROPEANA_KEY,
+        query: "*",
+        qf: `DATA_PROVIDER:"${normalizedId}"`,  
+        rows: 48,
+        start: 0,
       },
     });
-    return response.data;
+
+    console.log("Europeana Collection Artworks Response:", response.data);
+
+    return {
+      artworks: response.data.items.map((item: any) => ({
+        id: item.id,
+        title: item.title || "Untitled",
+        imageUrl: item.edmPreview?.[0] || "",
+        author: item.dataProvider?.[0] || "Unknown",
+        date: item.year || "Unknown",
+      })),
+      totalResults: response.data.totalResults || 0,
+    };
   } catch (error: any) {
-    console.error("Error fetching gallery by id:", error.response?.data || error.message);
+    console.error("❌ Error fetching collection artworks from Europeana:", error.response?.data || error.message);
     throw error;
   }
 };

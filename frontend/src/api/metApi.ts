@@ -1,20 +1,22 @@
-// src/api/metApi.ts
-import { Artwork } from "./ArtworkTypes"; 
-// Or wherever your Artwork interface lives
 
-/** Options object for MET search */
-export interface MetSearchOptions {
-  q: string;           // search term
-  hasImages?: boolean; // if user wants only items with images
-  dateBegin?: number;  // e.g. 1800
-  dateEnd?: number;    // e.g. 1899
+export interface Artwork {
+  id: string;
+  title: string;
+  author: string;
+  date: string;
+  imageUrl: string;
+  source: string;
 }
 
-/** Minimal example of a fetchFromMet function. 
- *  This fetches the object IDs from /search and returns an array of Artwork. 
- */
+export interface MetSearchOptions {
+  q: string;          
+  hasImages?: boolean; 
+  dateBegin?: number;  
+  dateEnd?: number;
+}
+
 export async function fetchFromMet(options: MetSearchOptions): Promise<Artwork[]> {
-  // 1) Build your query string
+ 
   const params = new URLSearchParams();
   params.set("q", options.q);
   if (options.hasImages) {
@@ -25,7 +27,7 @@ export async function fetchFromMet(options: MetSearchOptions): Promise<Artwork[]
     params.set("dateEnd", options.dateEnd.toString());
   }
 
-  // 2) Hit the MET search endpoint
+  
   const searchUrl = `https://collectionapi.metmuseum.org/public/collection/v1/search?${params.toString()}`;
   const searchRes = await fetch(searchUrl);
   if (!searchRes.ok) {
@@ -42,16 +44,16 @@ export async function fetchFromMet(options: MetSearchOptions): Promise<Artwork[]
     return [];
   }
 
-  // 3) For each object ID, fetch detail
+  
   const artworks: Artwork[] = [];
   for (const objectId of searchData.objectIDs.slice(0, 50)) { 
-    // Limit to 50 to avoid huge fetch loops, or adjust as you like
+
     const detailUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`;
     const detailRes = await fetch(detailUrl);
     if (!detailRes.ok) continue;
     const detailData = await detailRes.json() as any;
 
-    // 4) Construct your Artwork object
+    
     const art: Artwork = {
       id: String(detailData.objectID),
       title: detailData.title || "Untitled",
@@ -59,11 +61,29 @@ export async function fetchFromMet(options: MetSearchOptions): Promise<Artwork[]
       date: detailData.objectDate || "",
       imageUrl: detailData.primaryImageSmall || "",
       source: "MET",
-      // If you want to handle your century logic or other fields, do it here
+      
     };
 
     artworks.push(art);
   }
 
   return artworks;
+}
+export async function fetchSingleArtwork(artworkId: string): Promise<Artwork> {
+  const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${artworkId}`;
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`MET detail fetch error: ${res.status}`);
+  }
+  const data = await res.json();
+
+  return {
+    id: String(data.objectID),
+    title: data.title || "Untitled",
+    author: data.artistDisplayName || "Unknown",
+    date: data.objectDate || "",
+    imageUrl: data.primaryImage || data.primaryImageSmall || "",
+    source: "MET",
+  };
 }

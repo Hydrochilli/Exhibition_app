@@ -10,6 +10,8 @@ import "./index.css";
 import UserProfile from "./pages/UserProfile";
 import TemporaryCollection from "./pages/TemporaryCollection";
 import { useAuth } from "./contexts/AuthContext";
+import ArtworkDetail from "./components/ArtworkDetail";
+import SearchResults from "./components/SearchResults"; // etc.
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -18,6 +20,7 @@ const App: React.FC = () => {
     <div className="font-sans min-h-screen">
       <Header />
       <Routes>
+        <Route path="/artwork/:artworkId" element={<ArtworkDetail />} />
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/login" element={<LoginPage />} />

@@ -22,24 +22,3 @@ export const fetchEntitySuggestions = async (query: string) => {
 };
 
 
-// // src/api/europeanaEntityApi.ts
-// import axios from "axios";
-
-// const EUROPEANA_ENTITY_BASE_URL = "https://api.europeana.eu/entity/v2/suggest.json";
-// const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_KEY || "arceashelind";
-
-// export const fetchEntitySuggestions = async (query: string) => {
-//   try {
-//     const response = await axios.get(EUROPEANA_ENTITY_BASE_URL, {
-//       params: {
-//         wskey: EUROPEANA_API_KEY,
-//         query: query,
-//       },
-//     });
-//     // Adjust based on the actual response structure; assuming suggestions are in response.data.suggestions
-//     return response.data;
-//   } catch (error: any) {
-//     console.error("Error fetching entity suggestions:", error.response?.data || error.message);
-//     throw error;
-//   }
-// };

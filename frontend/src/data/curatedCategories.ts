@@ -69,7 +69,7 @@ export interface Category {
             imageUrl: 'https://api.europeana.eu/thumbnail/v3/400/ff41e825e29885bfc59bb8eb4cc741e7',
             query: 'photography',
           },
-        // Additional subcategories under Themes...
+   
       ],
     },
     {
@@ -78,7 +78,7 @@ export interface Category {
       description: 'Explore various topics.',
       imageUrl: 'https://example.com/images/topics.jpg',
       query: 'topics',
-      // You can add subcategories here as needed
+   
     },
     {
       id: 'exhibitions',

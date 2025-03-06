@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 type Artwork = {
   id: string;
@@ -9,7 +10,6 @@ type Artwork = {
   source: string;
 };
 
-// Function to handle adding to the temporary collection
 const addToTemporaryCollection = (artwork: Artwork) => {
   let collection = JSON.parse(localStorage.getItem("temporaryCollection") || "[]");
   collection.push(artwork);
@@ -19,7 +19,11 @@ const addToTemporaryCollection = (artwork: Artwork) => {
 
 const ArtworkCard: React.FC<{ artwork: Artwork }> = ({ artwork }) => {
   return (
-    <div className="border p-2 shadow-md rounded-lg transition-transform duration-200 hover:scale-105">
+     <Link
+      to={`/artwork/${artwork.id}`}
+      className="border p-2 shadow-md rounded-lg hover:shadow-xl transition block"
+    >
+   
       {artwork.imageUrl ? (
         <img src={artwork.imageUrl} alt={artwork.title} className="w-full h-48 object-cover rounded-md" />
       ) : (
@@ -34,7 +38,7 @@ const ArtworkCard: React.FC<{ artwork: Artwork }> = ({ artwork }) => {
       >
         Add to My Gallery
       </button>
-    </div>
+    </Link>
   );
 };
 
