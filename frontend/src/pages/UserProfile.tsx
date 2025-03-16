@@ -16,16 +16,26 @@ const UserProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // If user is null, short-circuit the component UI:
+  if (!user) {
+    return <div>Please log in to view your profile.</div>;
+  }
+
   useEffect(() => {
-    if (!user) return;
+    // Bail out if user is null (it won’t be if we’re here, but TS needs explicit check)
+   
 
     async function fetchGalleries() {
-      try {
+       if (!user) return;
+       try {
         console.log(`Fetching galleries for user ID: ${user.id}`);
-        
-        const response = await fetch(`http://localhost:3001/api/galleries/user/${user.id}`, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
+
+        const response = await fetch(
+          `http://localhost:3001/api/galleries/user/${user.id}`,
+          {
+            headers: { Authorization: `Bearer ${user.token}` },
+          }
+        );
 
         if (!response.ok) {
           const errorText = await response.text();
@@ -47,18 +57,32 @@ const UserProfile: React.FC = () => {
     fetchGalleries();
   }, [user]);
 
-  if (!user) return <div>Please log in to view your profile.</div>;
-
   return (
     <div className="container mx-auto p-4 grid gap-6">
       {/* User Info Card */}
       <Card className="p-4 shadow-lg">
         <CardContent className="text-center">
-          <Avatar src={user.avatarUrl} alt={user.username} sx={{ width: 80, height: 80, margin: "auto" }} />
-          <Typography variant="h5" className="mt-2">{user.name || user.username}</Typography>
+          <Avatar
+            src={user.avatarUrl}
+            alt={user.username}
+            sx={{ width: 80, height: 80, margin: "auto" }}
+          />
+          <Typography variant="h5" className="mt-2">
+            {user.name || user.username}
+          </Typography>
           <Typography variant="body1">{user.email}</Typography>
-          <Typography variant="body2" color="textSecondary">{user.city || "Location not set"}</Typography>
-          <Button component={Link} to="/edit-profile" variant="contained" color="primary" className="mt-3">Edit Profile</Button>
+          <Typography variant="body2" color="textSecondary">
+            {user.city || "Location not set"}
+          </Typography>
+          <Button
+            component={Link}
+            to="/edit-profile"
+            variant="contained"
+            color="primary"
+            className="mt-3"
+          >
+            Edit Profile
+          </Button>
         </CardContent>
       </Card>
 
@@ -74,7 +98,12 @@ const UserProfile: React.FC = () => {
           ) : galleries.length > 0 ? (
             <List>
               {galleries.map((gallery) => (
-                <ListItem key={gallery.id} component={Link} to={`/gallery/${gallery.id}`} className="hover:bg-gray-100 cursor-pointer">
+                <ListItem
+                  key={gallery.id}
+                  component={Link}
+                  to={`/gallery/${gallery.id}`}
+                  className="hover:bg-gray-100 cursor-pointer"
+                >
                   <Typography>{gallery.title}</Typography>
                 </ListItem>
               ))}

@@ -1,4 +1,3 @@
-// src/components/CuratedCategories.tsx
 import React from 'react';
 import { curatedCategories, Category } from '../data/curatedCategories';
 import { Link } from 'react-router-dom';

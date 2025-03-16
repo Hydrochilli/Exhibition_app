@@ -21,7 +21,7 @@ export const fetchGalleryThumbnailUsingSearch = async (searchTerm: string): Prom
     console.error("Error fetching gallery thumbnail using search:", error.response?.data || error.message);
     return "";
   }
-};import axios from "axios";
+};
 
 
   

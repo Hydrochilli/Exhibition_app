@@ -1,7 +1,6 @@
-// src/api/europeanaApi.ts
 import axios from "axios";
 
-const EUROPEANA_BASE_URL = "http://localhost:3001/api/europeana"; // Replaced with proxy endpoint
+const EUROPEANA_BASE_URL = "http://localhost:3001/api/europeana"; 
 const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_KEY || "ggosewbi";
 
 export interface EuropeanaItem {
@@ -17,9 +16,8 @@ export interface EuropeanaResponse {
   totalResults: number;
 }
 
-/**
- * Fetch artworks from Europeana using searchTerm, paging, and optional filters.
- */
+
+
 export const fetchEuropeanaArtworks = async (
   searchTerm: string,
   page: number,
@@ -30,36 +28,32 @@ export const fetchEuropeanaArtworks = async (
   try {
     console.log(`Fetching artworks for searchTerm: "${searchTerm}"...`);
 
-    // Build an array of qf filters if they exist
+  
     const qfParams: string[] = [];
 
-    // If user selected a type, e.g. "IMAGE", "VIDEO", "SOUND", etc.
     if (typeFilter) {
       qfParams.push(`TYPE:${typeFilter}`);
     }
 
-    // If user selected a century, e.g. "17"
-    // This is an example; adapt as needed (year ranges, etc.).
+  
     if (centuryFilter) {
-      // Example using hypothetical 'plnCentury:17' or a year range:
-      // qfParams.push("YEAR:[1600 TO 1699]");
+     
       qfParams.push(`plnCentury:${centuryFilter}`);
     }
 
-    // Call the proxy instead of Europeana directly
+
     const response = await axios.get(EUROPEANA_BASE_URL, {
       params: {
         wskey: EUROPEANA_API_KEY,
         query: searchTerm,
         rows: pageSize,
         start: (page - 1) * pageSize + 1,
-        qf: qfParams, // If multiple items in qfParams, Axios sends them as repeated ?qf=XXX
+        qf: qfParams, 
       },
     });
 
     console.log("Europeana Response:", response.data);
 
-    // Map the returned items to your desired structure
     const artworks = response.data.items.map((item: any) => ({
       id: item.id,
       title: item.title?.[0] || "Untitled",
@@ -79,7 +73,7 @@ export const fetchEuropeanaArtworks = async (
   }
 };
 
-// Helper: Normalize the collection ID
+
 const normalizeCollectionId = (rawId: string): string => {
   let id = rawId;
   if (id.includes("http")) {
@@ -89,9 +83,7 @@ const normalizeCollectionId = (rawId: string): string => {
   return id.replace(/[^a-zA-Z0-9-_]/g, "");
 };
 
-/**
- * Fetch a representative image for a collection using the Record API
- */
+
 export const fetchRepresentativeImageForCollection = async (
   rawCollectionId: string,
   collectionTitle?: string
@@ -99,7 +91,6 @@ export const fetchRepresentativeImageForCollection = async (
   const normalizedId = normalizeCollectionId(rawCollectionId);
   let imageUrl = "";
   try {
-    // Query using the normalized collection ID
     const response = await axios.get(EUROPEANA_BASE_URL, {
       params: {
         wskey: EUROPEANA_API_KEY,
@@ -115,7 +106,7 @@ export const fetchRepresentativeImageForCollection = async (
     console.error("Error fetching representative image with normalized id:", error.response?.data || error.message);
   }
 
-  // If no image yet and collectionTitle is provided, try searching by title
+ 
   if (!imageUrl && collectionTitle) {
     try {
       const response = await axios.get(EUROPEANA_BASE_URL, {
@@ -136,9 +127,6 @@ export const fetchRepresentativeImageForCollection = async (
   return imageUrl;
 };
 
-/**
- * Fetch Europeana "Collections" based on a given queryParam
- */
 export const fetchEuropeanaCollections = async (queryParam: string) => {
   try {
     console.log("Fetching Europeana collections for query:", queryParam);
@@ -146,20 +134,19 @@ export const fetchEuropeanaCollections = async (queryParam: string) => {
       params: {
         wskey: EUROPEANA_API_KEY,
         query: queryParam,
-        qf: "TYPE:IMAGE", // Hard-coded example
+        qf: "TYPE:IMAGE", 
         rows: 20,
       },
     });
     console.log("Europeana Collections Response:", response.data);
 
-    // Map each collection, fetch a representative image for each
+
     const collectionsData = response.data.items.map(async (collection: any) => {
       const imageUrl = await fetchRepresentativeImageForCollection(
         collection.id,
         collection.title?.[0]
       );
 
-      // Prefer an English description if available
       let description = "No description available";
       if (
         collection.dcDescriptionLangAware &&
@@ -168,7 +155,7 @@ export const fetchEuropeanaCollections = async (queryParam: string) => {
       ) {
         description = collection.dcDescriptionLangAware.en[0];
       } else if (collection.dcDescription && collection.dcDescription.length > 0) {
-        description = collection.dcDescription[0]; // fallback
+        description = collection.dcDescription[0]; 
       }
       return {
         id: collection.id,
@@ -186,9 +173,8 @@ export const fetchEuropeanaCollections = async (queryParam: string) => {
   }
 };
 
-/**
- * Fetch artworks for a specific Europeana collection via qf=collection:<ID>
- */
+
+
 export const fetchEuropeanaCollectionArtworks = async (collectionId: string) => {
   try {
     const response = await axios.get<EuropeanaResponse>(EUROPEANA_BASE_URL, {

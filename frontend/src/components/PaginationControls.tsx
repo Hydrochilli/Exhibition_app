@@ -1,21 +1,23 @@
 import React from "react";
 
-const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
+type PaginationControlsProps = {
+  currentPage: number;
+  totalPages: number;
+  onPrev: () => void;
+  onNext: () => void;
+};
+
+const PaginationControls: React.FC<PaginationControlsProps> = ({
+  currentPage,
+  totalPages,
+  onPrev,
+  onNext,
+}) => {
   return (
     <div className="flex justify-center items-center mt-6 space-x-2">
-     
       <button
         className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
-        onClick={() => onPageChange(1)}
-        disabled={currentPage === 1}
-      >
-        ⏮ First
-      </button>
-
-      
-      <button
-        className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={onPrev}
         disabled={currentPage === 1}
       >
         ◀ Prev
@@ -27,18 +29,10 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
 
       <button
         className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={onNext}
         disabled={currentPage === totalPages}
       >
         Next ▶
-      </button>
-
-      <button
-        className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50"
-        onClick={() => onPageChange(totalPages)}
-        disabled={currentPage === totalPages}
-      >
-        ⏭ Last
       </button>
     </div>
   );

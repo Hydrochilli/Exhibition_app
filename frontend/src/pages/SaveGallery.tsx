@@ -9,7 +9,8 @@ const SaveGallery = () => {
   const navigate = useNavigate();
 
   const saveGallery = async () => {
-    const collection = JSON.parse(localStorage.getItem("temporaryCollection")) || [];
+    const collection = JSON.parse(localStorage.getItem("temporaryCollection") || "[]")
+
     if (collection.length === 0) return alert("No items to save!");
 
     const response = await fetch("http://localhost:3001/api/gallery/create", {

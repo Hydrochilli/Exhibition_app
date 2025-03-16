@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
-// Example Artwork type; adapt to match your code
+
 type Artwork = {
   id: string;
   title: string;
@@ -25,7 +25,7 @@ export default function MyGalleriesPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Load user’s galleries from the backend
+   
     async function loadGalleries() {
       if (!user?.token) return;
       try {

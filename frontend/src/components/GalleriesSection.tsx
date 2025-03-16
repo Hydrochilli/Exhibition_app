@@ -42,7 +42,7 @@ const GalleriesSection: React.FC = () => {
                     : gallery.title.en
                   : gallery.title;
 
-              currentThumbnail = await fetchGalleryThumbnailUsingSearch(titleForSearch);
+              currentThumbnail = await fetchGalleryThumbnailUsingSearch(titleForSearch || "");
               return { ...gallery, thumbnail: currentThumbnail };
             }
             return gallery;

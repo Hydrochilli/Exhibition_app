@@ -46,11 +46,12 @@ const ArtworkList: React.FC<ArtworkListProps> = ({
       </div>
 
       <PaginationControls
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPrev={onPrev}
-        onNext={onNext}
-      />
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPrev={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+  onNext={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+/>
+
     </div>
   );
 };

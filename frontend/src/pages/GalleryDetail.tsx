@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card, CardContent, Typography } from "@mui/material";
-import Slider from "react-slick"; // React Slick Carousel
+import Slider from "react-slick"; 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css"; 
 
@@ -24,13 +24,13 @@ const GalleryDetail: React.FC = () => {
     <div className="container mx-auto p-4">
       <Typography variant="h4" align="center" gutterBottom>{gallery.name}</Typography>
 
-      {/* Large Image Viewer */}
+     
       <Card className="shadow-lg p-4">
         <img src={selectedImage.src} alt={selectedImage.title} className="w-full max-h-[500px] object-contain mx-auto" />
         <Typography align="center">{selectedImage.title}</Typography>
       </Card>
 
-      {/* Thumbnail Carousel */}
+   
       <Slider slidesToShow={3} infinite centerMode>
         {gallery.images.map((image) => (
           <img 

@@ -13,7 +13,7 @@ export interface MetSearchOptions {
 /** Minimal example of a fetchFromMet function. 
  *  This fetches the object IDs from /search and returns an array of Artwork. 
  */
-export async function fetchFromMet(options: MetSearchOptions): Promise<Artwork[]> {
+export async function searchMet(options: MetSearchOptions): Promise<Artwork[]> {
   // 1) Build your query string
   const params = new URLSearchParams();
   params.set("q", options.q);

@@ -9,7 +9,7 @@ const CollectionCards: React.FC = () => {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const data = await fetchEuropeanaCollections();
+        const data = await fetchEuropeanaCollections("");
         console.log("Fetched collections:", data);
         setCollections(data);
       } catch (error) {

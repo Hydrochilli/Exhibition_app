@@ -178,7 +178,12 @@ export const fetchEuropeanaCollections = async (queryParam: string) => {
 };
 
 
-export const fetchEuropeanaCollectionArtworks = async (collectionId: string) => {
+export const fetchEuropeanaCollectionArtworks = async (
+  collectionId: string,
+  page = 1,
+  pageSize = 48
+
+) => {
   try {
     const response = await axios.get<EuropeanaResponse>(EUROPEANA_BASE_URL, {
       params: {

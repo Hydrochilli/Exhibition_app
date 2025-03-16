@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchEuropeanaCollectionArtworks } from "../api/userSetApi";
+import { fetchEuropeanaCollectionArtworks } from "../api/europeanaApi";
 import PaginationControls from "./PaginationControls";
 
 const ITEMS_PER_PAGE = 48;
@@ -54,7 +54,13 @@ const GalleryItems: React.FC = () => {
         ))}
       </div>
       {totalPages > 1 && (
-        <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+       <PaginationControls
+       currentPage={currentPage}
+       totalPages={totalPages}
+       onPrev={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+       onNext={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+     />
+     
       )}
     </div>
   );

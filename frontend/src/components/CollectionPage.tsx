@@ -1,8 +1,7 @@
-// src/pages/CollectionPage.tsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { searchMet } from "../api/metApi";
-
+import { fetchEuropeanaCollectionArtworks } from "../api/europeanaApi";
 import ArtworkList from "./ArtworkList";
 
 const CollectionPage: React.FC = () => {
@@ -14,6 +13,7 @@ const CollectionPage: React.FC = () => {
   useEffect(() => {
     const fetchArtworks = async () => {
       try {
+        if (!collectionId) return;
         const data = await fetchEuropeanaCollectionArtworks(collectionId);
         setCollectionArtworks(data.artworks);
         if (data.artworks.length > 0) {
@@ -31,8 +31,8 @@ const CollectionPage: React.FC = () => {
     if (!searchQuery) return;
     const fetchRelatedArtworks = async () => {
       try {
-        const data = await fetchMetArtworksPage(searchQuery, 1, 10);
-        setRelatedArtworks(data.artworks);
+        const data = await searchMet({q: searchQuery});
+        setRelatedArtworks(data);
       } catch (error) {
         console.error("Error fetching related artworks:", error);
       }

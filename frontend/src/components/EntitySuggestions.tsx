@@ -1,4 +1,3 @@
-// src/components/EntitySuggestions.tsx
 import React, { useState, useEffect } from "react";
 import { fetchEntitySuggestions } from "../api/europeanaEntityApi";
 
@@ -43,7 +42,7 @@ const EntitySuggestions: React.FC<EntitySuggestionsProps> = ({ query, title }) =
       <h3 className="text-xl font-bold mb-4">{title}</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {entities.map((entity) => {
-          // Extract the description (used as the title) from prefLabel
+     
           let displayDescription = "No Title";
           if (entity.prefLabel) {
             if (typeof entity.prefLabel === "string") {
@@ -54,7 +53,7 @@ const EntitySuggestions: React.FC<EntitySuggestionsProps> = ({ query, title }) =
                 : entity.prefLabel.en;
             }
           }
-          // Extract the note as the short description beneath
+      
           let displayNote = "";
           if (entity.note) {
             if (typeof entity.note === "string") {
@@ -78,11 +77,11 @@ const EntitySuggestions: React.FC<EntitySuggestionsProps> = ({ query, title }) =
                 className="w-full h-32 object-cover"
               />
               <div className="p-2 flex flex-col">
-                {/* Display the description (title) at the top */}
+              
                 <div className="font-semibold text-center">
                   {displayDescription}
                 </div>
-                {/* Display the note beneath */}
+                
                 {displayNote && (
                   <div className="text-sm text-gray-600 mt-1 text-center">
                     {displayNote.length > 100

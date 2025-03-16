@@ -1,4 +1,4 @@
-//src/components/ArtworkList.tsx
+
 
 import React from "react";
 import ArtworkCard from "./ArtworkCard";
@@ -10,6 +10,7 @@ type Artwork = {
   imageUrl: string;
   author: string;
   date: string;
+  source: string;
 };
 
 type ArtworkListProps = {
@@ -35,13 +36,7 @@ const ArtworkList: React.FC<ArtworkListProps> = ({
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {artworks.map((art) => (
-          <ArtworkCard
-            key={art.id}
-            title={art.title}
-            imageUrl={art.imageUrl}
-            author={art.author}
-            date={art.date}
-          />
+          <ArtworkCard key={art.id} artwork={art} />
         ))}
       </div>
 

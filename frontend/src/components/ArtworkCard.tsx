@@ -1,4 +1,3 @@
-// ArtworkCard.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -8,7 +7,7 @@ type Artwork = {
   author: string;
   date: string;
   imageUrl: string;
-  source: string; // "Met" | "Cleveland" etc.
+  source: string; 
 };
 
 type Props = {
@@ -18,10 +17,10 @@ type Props = {
 const ArtworkCard: React.FC<Props> = ({ artwork }) => {
   return (
     <div className="border p-2 shadow-md rounded-lg">
-      {/* We only want one <Link> wrapper. */}
+
       <Link
         to={`/artwork/${artwork.id}`}
-        state={{ source: artwork.source }} // pass the source in router state
+        state={{ source: artwork.source }}
         className="block"
       >
         {artwork.imageUrl ? (

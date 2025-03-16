@@ -1,7 +1,20 @@
 import axios from "axios";
 
+
+
 const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_KEY;
 const EUROPEANA_BASE_URL = "https://api.europeana.eu/record/v2/search.json";
+
+export interface UserSet {
+  id: string;
+  title: { en?: string[] };
+  description?: { en?: string[] };
+  thumbnail?: string;
+  isShownBy?: { thumbnail?: string } | string;
+  type: string;
+  visibility?: string;
+  // ... other properties as needed
+}
 
 
 export const fetchPublicGalleries = async (page = 1, pageSize = 12) => {

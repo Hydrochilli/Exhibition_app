@@ -30,9 +30,7 @@ const ArtworkDetail: React.FC = () => {
       try {
         setLoading(true);
 
-        // figure out the source:
-        // if location.state.source === "Cleveland", do Cleveland fetch
-        // else default to MET
+    
         const source = location.state?.source || "Met"; // fallback
 
         let data: Artwork | null = null;

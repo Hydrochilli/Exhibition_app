@@ -1,4 +1,3 @@
-// SearchResults.tsx
 import React, { useState, useEffect } from "react";
 import { fetchUnifiedSearch } from "../api/unifySearch";
 import PaginationControls from "./PaginationControls";
@@ -111,20 +110,21 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         </div>
       </div>
 
-      {/* Results Grid */}
+     
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         {paginatedResults.map((art) => (
           <ArtworkCard key={art.id} artwork={art} />
         ))}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+      <PaginationControls
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPrev={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+      onNext={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+    />
+    
       )}
 
       {loading && <p className="text-gray-500 text-center">Loading more results...</p>}
