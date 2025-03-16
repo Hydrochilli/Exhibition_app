@@ -1,7 +1,7 @@
 // src/api/europeanaApi.ts
 import axios from "axios";
 const EUROPEANA_BASE_URL = "http://localhost:3001/api/europeana"; // Replaced with proxy endpoint
-const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_KEY || "ggosewbi";
+const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_KEY ;
 /**
  * Fetch artworks from Europeana using searchTerm, paging, and optional filters.
  */

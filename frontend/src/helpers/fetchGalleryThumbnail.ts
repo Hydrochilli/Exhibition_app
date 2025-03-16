@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const RECORD_API_URL = "https://api.europeana.eu/record/v2/search.json";
-const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_API_KEY || "ggosewbi";
+const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_API_KEY;
 
 export const fetchGalleryThumbnailUsingSearch = async (searchTerm: string): Promise<string> => {
   try {
