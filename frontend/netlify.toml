@@ -1,0 +1,7 @@
+[build]
+  base = "frontend"
+  publish = "dist"
+  command = "npm run build"
+
+[functions]
+  directory = "false" # ✅ This tells Netlify NOT to expect functions
