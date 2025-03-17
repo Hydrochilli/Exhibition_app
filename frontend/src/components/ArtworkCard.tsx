@@ -7,17 +7,21 @@ type Artwork = {
   author: string;
   date: string;
   imageUrl: string;
-  source: string; 
+  source: string;
 };
 
-type Props = {
-  artwork: Artwork;
+const addToTemporaryCollection = (artwork: Artwork) => {
+  let collection = JSON.parse(localStorage.getItem("temporaryCollection") || "[]");
+  collection.push(artwork);
+  localStorage.setItem("temporaryCollection", JSON.stringify(collection));
+  alert("Added to Temporary Collection!");
 };
 
-const ArtworkCard: React.FC<Props> = ({ artwork }) => {
+const ArtworkCard: React.FC<{ artwork: Artwork }> = ({ artwork }) => {
+  console.log("DEBUG: ArtworkCard rendering with:", artwork);
+
   return (
-    <div className="border p-2 shadow-md rounded-lg">
-
+    <div className="border p-2 shadow-md rounded-lg transition-transform duration-200 hover:scale-105">
       <Link
         to={`/artwork/${artwork.id}`}
         state={{ source: artwork.source }}
@@ -30,13 +34,21 @@ const ArtworkCard: React.FC<Props> = ({ artwork }) => {
             className="w-full h-48 object-cover rounded-md"
           />
         ) : (
-          <div className="w-full h-48 bg-gray-200 flex items-center justify-center">No Image</div>
+          <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+            No Image
+          </div>
         )}
         <h3 className="text-lg font-semibold mt-2">{artwork.title}</h3>
         <p className="text-sm text-gray-700">{artwork.author}</p>
         <p className="text-xs text-gray-500">{artwork.date}</p>
-        <p className="text-xs text-gray-400">Source: {artwork.source}</p>
       </Link>
+
+      <button
+        className="mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        onClick={() => addToTemporaryCollection(artwork)}
+      >
+        Add to My Gallery
+      </button>
     </div>
   );
 };

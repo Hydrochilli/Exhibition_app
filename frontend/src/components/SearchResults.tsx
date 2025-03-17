@@ -32,17 +32,20 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  // For sorting
   const [sortOption, setSortOption] = useState("title-asc");
 
   useEffect(() => {
     if (!searchTerm) return;
 
     setLoading(true);
-    setCurrentPage(1);
+    setCurrentPage(1); // reset pagination when search changes
 
     fetchUnifiedSearch(searchTerm, century, department, selectedApi)
       .then((results) => {
         setArtworks(results);
+        // calculate how many pages we need
         setTotalPages(Math.ceil(results.length / ITEMS_PER_PAGE));
       })
       .catch((err) => {
@@ -55,15 +58,15 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   if (!searchTerm) return <div>Please enter a search term.</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
-  // Sorting
-  function parseDate(dateStr: string): number {
+  // Sorting logic (from your old code)
+  const parseDate = (dateStr: string): number => {
     if (!dateStr || dateStr.toLowerCase() === "unknown") return Infinity;
     const bcMatch = dateStr.match(/(\d+)\s*BC/i);
     if (bcMatch) return -parseInt(bcMatch[1], 10);
     const adMatch = dateStr.match(/\b(\d{3,4})\b/);
     if (adMatch) return parseInt(adMatch[1], 10);
     return Infinity;
-  }
+  };
 
   const sortedArtworks = [...artworks].sort((a, b) => {
     switch (sortOption) {
@@ -84,6 +87,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     }
   });
 
+  // Pagination
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedResults = sortedArtworks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
@@ -91,7 +95,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     <div className="container mx-auto p-4">
       <h2 className="text-xl font-semibold mt-6">Results for "{searchTerm}"</h2>
 
-      {/* Sort Option */}
+      {/* Sort Options */}
       <div className="flex flex-col md:flex-row gap-4 justify-center my-4">
         <div>
           <label className="block mb-1 font-semibold">Sort By</label>
@@ -110,21 +114,21 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         </div>
       </div>
 
-     
+      {/* Artwork Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         {paginatedResults.map((art) => (
           <ArtworkCard key={art.id} artwork={art} />
         ))}
       </div>
 
+      {/* Pagination Controls (Using onPrev / onNext) */}
       {totalPages > 1 && (
-      <PaginationControls
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPrev={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-      onNext={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-    />
-    
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPrev={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+          onNext={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+        />
       )}
 
       {loading && <p className="text-gray-500 text-center">Loading more results...</p>}
@@ -133,3 +137,4 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 };
 
 export default SearchResults;
+
