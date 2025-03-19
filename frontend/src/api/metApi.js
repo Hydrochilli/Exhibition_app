@@ -58,4 +58,3 @@ export async function fetchSingleArtwork(objectId) {
         description: obj.creditLine || obj.inscriptions || obj.objectName || "No description available."
     };
 }
-http: ; //localhost:5173/artwork/127573

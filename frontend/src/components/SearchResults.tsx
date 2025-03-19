@@ -10,7 +10,7 @@ type Artwork = {
   date: string;
   imageUrl: string;
   source: string;
-  description: string;
+ 
 };
 
 type SearchResultsProps = {
