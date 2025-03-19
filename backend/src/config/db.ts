@@ -23,11 +23,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 
 
+// export const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false, 
+// });
+
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false, 
+  ssl: { rejectUnauthorized: false, } 
 });
-
 pool.connect()
   .then(() => console.log("✅ Connected to PostgreSQL"))
   .catch((err) => console.error("❌ Database connection error:", err));
