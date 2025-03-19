@@ -85,7 +85,7 @@ The **Exhibition Curation App** is a web application designed for users to searc
 3. **Push** to your fork and submit a **pull request**.
 
 ## **License**
-This project is open-source under the **MIT License**.
+The IP contained in this project where applicable, remains the property of Northcoders and Tech Returners, and may not be reused without their express permission
 
 ---
 Happy curating! 🎨🏛
