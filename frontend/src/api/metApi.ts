@@ -85,4 +85,3 @@ export async function fetchSingleArtwork(objectId: string): Promise<Artwork | nu
     description: obj.creditLine || obj.inscriptions || obj.objectName || "No description available." 
   };
 }
-http://localhost:5173/artwork/127573
