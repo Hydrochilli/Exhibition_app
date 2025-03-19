@@ -8,6 +8,7 @@ type Artwork = {
   date: string;
   imageUrl: string;
   source: string;
+  description: string | null;
 };
 
 const addToTemporaryCollection = (artwork: Artwork) => {

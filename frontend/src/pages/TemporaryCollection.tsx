@@ -9,6 +9,7 @@ type Artwork = {
   date: string;
   imageUrl: string;
   source: string;
+  description: string | null;
 };
 
 const TemporaryCollection: React.FC = () => {

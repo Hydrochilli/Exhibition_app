@@ -10,6 +10,7 @@ type Artwork = {
   date: string;
   imageUrl: string;
   source: string;
+  description: string | null;
 };
 
 type Gallery = {

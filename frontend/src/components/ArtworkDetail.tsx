@@ -11,6 +11,7 @@ interface Artwork {
   date: string;
   imageUrl: string;
   source: string; // "Met" or "Cleveland"
+  description: string | null;
 }
 
 const ArtworkDetail: React.FC = () => {
@@ -41,12 +42,14 @@ const ArtworkDetail: React.FC = () => {
           data = await fetchMetDetail(artworkId);
         }
         setArtwork(data);
+        console.log("DEBUG: final setArtwork =>", data);
       } catch (err) {
         console.error("Error fetching detail:", err);
         setError("Failed to load artwork detail.");
       } finally {
         setLoading(false);
       }
+    
     })();
   }, [artworkId, location.state?.source]);
 
@@ -54,6 +57,7 @@ const ArtworkDetail: React.FC = () => {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!artwork) return <div>No detail available.</div>;
 
+  
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-semibold mb-4">{artwork.title}</h2>
@@ -77,8 +81,14 @@ const ArtworkDetail: React.FC = () => {
             <strong>Date:</strong> {artwork.date || "Unknown"}
           </p>
           <p className="mt-4 text-sm text-gray-700">
-            <strong>Source:</strong> {artwork.source}
+           
+          <strong>Source:</strong> {artwork.source}
           </p>
+          <p className="mt-4 text-gray-700">
+              <strong>Description:</strong> {artwork.description}
+            </p>
+        
+
         </div>
       </div>
     </div>

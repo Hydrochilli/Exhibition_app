@@ -7,6 +7,7 @@ export interface Artwork {
   date: string;
   imageUrl: string;
   source: string;
+  description: string | null;
 }
 
 export async function fetchSingleClevelandArtwork(objectId: string): Promise<Artwork | null> {
@@ -22,7 +23,14 @@ export async function fetchSingleClevelandArtwork(objectId: string): Promise<Art
     }
     const item = json.data;
 
-    // shape the result
+    const description =
+    item.description ||
+    item.wall_description ||
+    item.catalogue_raisonne ||
+    "No description available.";
+    console.log("DEBUG: Cleveland single fetch =>", item);
+
+
     return {
       id: String(item.id),
       title: item.title || "Untitled",
@@ -30,6 +38,7 @@ export async function fetchSingleClevelandArtwork(objectId: string): Promise<Art
       date: item.creation_date || "",
       imageUrl: item.images?.web?.url || "",
       source: "Cleveland",
+      description,
     };
   } catch (err) {
     console.error("Error fetching single Cleveland item:", err);
@@ -98,6 +107,8 @@ export async function fetchFromCleveland(options: ClevelandOptions): Promise<Art
       date: item.creation_date || "",
       imageUrl,
       source: "Cleveland",
+      description: item.description || "no description available",
+
       
     };
   });

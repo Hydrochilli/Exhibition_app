@@ -11,6 +11,7 @@ type Artwork = {
   author: string;
   date: string;
   source: string;
+  description: string | null;
 };
 
 type ArtworkListProps = {

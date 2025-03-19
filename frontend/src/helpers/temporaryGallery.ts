@@ -9,6 +9,7 @@ interface Artwork {
     date: string;
     imageUrl: string;
     source: string;
+    description: string;
   }
   
 

@@ -10,15 +10,17 @@ const SearchResults = ({ searchTerm, century = "", department = "", selectedApi 
     const [error, setError] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    // For sorting
     const [sortOption, setSortOption] = useState("title-asc");
     useEffect(() => {
         if (!searchTerm)
             return;
         setLoading(true);
-        setCurrentPage(1);
+        setCurrentPage(1); // reset pagination when search changes
         fetchUnifiedSearch(searchTerm, century, department, selectedApi)
             .then((results) => {
             setArtworks(results);
+            // calculate how many pages we need
             setTotalPages(Math.ceil(results.length / ITEMS_PER_PAGE));
         })
             .catch((err) => {
@@ -31,8 +33,8 @@ const SearchResults = ({ searchTerm, century = "", department = "", selectedApi 
         return _jsx("div", { children: "Please enter a search term." });
     if (error)
         return _jsxs("div", { className: "text-red-500", children: ["Error: ", error] });
-    // Sorting
-    function parseDate(dateStr) {
+    // Sorting logic (from your old code)
+    const parseDate = (dateStr) => {
         if (!dateStr || dateStr.toLowerCase() === "unknown")
             return Infinity;
         const bcMatch = dateStr.match(/(\d+)\s*BC/i);
@@ -42,7 +44,7 @@ const SearchResults = ({ searchTerm, century = "", department = "", selectedApi 
         if (adMatch)
             return parseInt(adMatch[1], 10);
         return Infinity;
-    }
+    };
     const sortedArtworks = [...artworks].sort((a, b) => {
         switch (sortOption) {
             case "title-asc":
@@ -61,8 +63,9 @@ const SearchResults = ({ searchTerm, century = "", department = "", selectedApi 
                 return 0;
         }
     });
+    // Pagination
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const paginatedResults = sortedArtworks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-    return (_jsxs("div", { className: "container mx-auto p-4", children: [_jsxs("h2", { className: "text-xl font-semibold mt-6", children: ["Results for \"", searchTerm, "\""] }), _jsx("div", { className: "flex flex-col md:flex-row gap-4 justify-center my-4", children: _jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-semibold", children: "Sort By" }), _jsxs("select", { value: sortOption, onChange: (e) => setSortOption(e.target.value), className: "border rounded p-1", children: [_jsx("option", { value: "title-asc", children: "Title (A-Z)" }), _jsx("option", { value: "title-desc", children: "Title (Z-A)" }), _jsx("option", { value: "date-desc", children: "Date (Newest First)" }), _jsx("option", { value: "date-asc", children: "Date (Oldest First)" }), _jsx("option", { value: "source-asc", children: "Source (A-Z)" }), _jsx("option", { value: "source-desc", children: "Source (Z-A)" })] })] }) }), _jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4", children: paginatedResults.map((art) => (_jsx(ArtworkCard, { artwork: art }, art.id))) }), totalPages > 1 && (_jsx(PaginationControls, { currentPage: currentPage, totalPages: totalPages, onPrev: () => setCurrentPage(prev => Math.max(prev - 1, 1)), onNext: () => setCurrentPage(prev => Math.min(prev + 1, totalPages)) })), loading && _jsx("p", { className: "text-gray-500 text-center", children: "Loading more results..." })] }));
+    return (_jsxs("div", { className: "container mx-auto p-4", children: [_jsxs("h2", { className: "text-xl font-semibold mt-6", children: ["Results for \"", searchTerm, "\""] }), _jsx("div", { className: "flex flex-col md:flex-row gap-4 justify-center my-4", children: _jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-semibold", children: "Sort By" }), _jsxs("select", { value: sortOption, onChange: (e) => setSortOption(e.target.value), className: "border rounded p-1", children: [_jsx("option", { value: "title-asc", children: "Title (A-Z)" }), _jsx("option", { value: "title-desc", children: "Title (Z-A)" }), _jsx("option", { value: "date-desc", children: "Date (Newest First)" }), _jsx("option", { value: "date-asc", children: "Date (Oldest First)" }), _jsx("option", { value: "source-asc", children: "Source (A-Z)" }), _jsx("option", { value: "source-desc", children: "Source (Z-A)" })] })] }) }), _jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4", children: paginatedResults.map((art) => (_jsx(ArtworkCard, { artwork: art }, art.id))) }), totalPages > 1 && (_jsx(PaginationControls, { currentPage: currentPage, totalPages: totalPages, onPrev: () => setCurrentPage((prev) => Math.max(1, prev - 1)), onNext: () => setCurrentPage((prev) => Math.min(totalPages, prev + 1)) })), loading && _jsx("p", { className: "text-gray-500 text-center", children: "Loading more results..." })] }));
 };
 export default SearchResults;

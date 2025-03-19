@@ -32,6 +32,7 @@ export async function searchMet(options) {
             date: obj.objectDate || "",
             imageUrl, // ✅ Corrected and explicitly defined
             source: "MET",
+            description: obj.description,
         };
         artworks.push(art);
     }
@@ -54,5 +55,7 @@ export async function fetchSingleArtwork(objectId) {
         date: obj.objectDate || "",
         imageUrl,
         source: "Met",
+        description: obj.creditLine || obj.inscriptions || obj.objectName || "No description available."
     };
 }
+http: ; //localhost:5173/artwork/127573

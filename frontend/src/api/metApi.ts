@@ -6,6 +6,7 @@ export interface Artwork {
   date: string;
   imageUrl: string;
   source: string;
+  description: string | null
 }
 
 export interface MetSearchOptions {
@@ -52,6 +53,7 @@ export async function searchMet(options: MetSearchOptions): Promise<Artwork[]> {
       date: obj.objectDate || "",
       imageUrl,  // ✅ Corrected and explicitly defined
       source: "MET",
+      description: obj.description,
     };
 
     artworks.push(art);
@@ -80,5 +82,7 @@ export async function fetchSingleArtwork(objectId: string): Promise<Artwork | nu
     date: obj.objectDate || "",
     imageUrl,
     source: "Met",
+    description: obj.creditLine || obj.inscriptions || obj.objectName || "No description available." 
   };
 }
+http://localhost:5173/artwork/127573
