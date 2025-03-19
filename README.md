@@ -1,5 +1,10 @@
 # Exhibition Curation App
-Hosted site: https://exhibition-curation.netlify.app/
+- Hosted site: 
+
+https://exhibition-curation.netlify.app/
+
+## Note - About the Homepage
+Whilst you can currently search for and add artworks to a  'Temporary Gallery', our homepage is currently being built and we soon hope to add pre-curated galleries. Currently you may click on an image (which will soon be) linking to one of these curated galleries -such as those under 'Themes', and be taken to a blank page, but this will soon be filled with curated artworks and artefacts from the curated gallery.  
 
 ## Overview
 The **Exhibition Curation App** is a web application designed for users to search, collect, and curate artwork from multiple online museum collections. Users can browse artwork, save pieces to a temporary collection, and create personal galleries once logged in.
