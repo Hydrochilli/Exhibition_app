@@ -1,4 +1,5 @@
 # Exhibition Curation App
+Hosted site: https://exhibition-curation.netlify.app/
 
 ## Overview
 The **Exhibition Curation App** is a web application designed for users to search, collect, and curate artwork from multiple online museum collections. Users can browse artwork, save pieces to a temporary collection, and create personal galleries once logged in.
@@ -19,7 +20,7 @@ The **Exhibition Curation App** is a web application designed for users to searc
 ### **Backend Setup**
 1. **Clone the repository**
    ```sh
-   git clone https://github.com/your-repo/exhibition-app.git
+   git clone [https://github.com/Hydrochilli/Exhibition_app]
    cd exhibition-app/backend
    ```
 2. **Install dependencies**
