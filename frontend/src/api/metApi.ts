@@ -43,7 +43,7 @@ export async function searchMet(options: MetSearchOptions): Promise<Artwork[]> {
 
     const obj = await detailRes.json();
 
-    // ✅ Integrated imageUrl fix explicitly here:
+
     const imageUrl = obj.primaryImageSmall || obj.primaryImage || "";
 
     const art: Artwork = {

@@ -16,13 +16,13 @@ const UserProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // If user is null, short-circuit the component UI:
+
   if (!user) {
     return <div>Please log in to view your profile.</div>;
   }
 
   useEffect(() => {
-    // Bail out if user is null (it won’t be if we’re here, but TS needs explicit check)
+ 
    
 
     async function fetchGalleries() {
@@ -31,7 +31,7 @@ const UserProfile: React.FC = () => {
         console.log(`Fetching galleries for user ID: ${user.id}`);
 
         const response = await fetch(
-          `https://exhibition-app.onrender.com/api/galleries/user/`,
+          `https://exhibition-app.onrender.com/api/galleries/user`,
           {
             headers: { Authorization: `Bearer ${user.token}` },
           }
