@@ -31,7 +31,7 @@ const UserProfile: React.FC = () => {
         console.log(`Fetching galleries for user ID: ${user.id}`);
 
         const response = await fetch(
-          `https://exhibition-app.onrender.com/api/galleries/user/${user.id}`,
+          `https://exhibition-app.onrender.com/api/galleries/user/`,
           {
             headers: { Authorization: `Bearer ${user.token}` },
           }
