@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { pool } from "../config/db";
 
 
+
 export async function getUserGalleries(req: Request, res: Response) {
   try {
     const userId = (req as any).user.userId;
@@ -10,29 +11,16 @@ export async function getUserGalleries(req: Request, res: Response) {
       [userId]
     );
 
-    res.json(result.rows);
+    return res.json({ galleries: result.rows });
   } catch (error) {
     console.error("Error fetching user galleries:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
-// Fetch All Galleries
-export async function getGalleries(req: Request, res: Response) {
-  try {
-    const userId = (req as any).userId;
-    const galleriesRes = await pool.query(
-      "SELECT id, title, description, created_at FROM galleries WHERE user_id = $1 ORDER BY created_at DESC",
-      [userId]
-    );
-    return res.json({ galleries: galleriesRes.rows });
-  } catch (err: any) {
-    console.error("getGalleries error", err);
-    return res.status(500).json({ message: "Server error" });
-  }
-}
 
-// Create a New Gallery
+
+
 export async function createGallery(req: Request, res: Response) {
   try {
     const userId = (req as any).userId;

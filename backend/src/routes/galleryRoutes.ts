@@ -3,28 +3,21 @@ import { requireAuth } from "../middlewares/authMiddleware";
 import {
   saveGallery,
   getUserGalleries,
-  getGalleries,
   createGallery,
   addArtworkToGallery,
 } from "../controllers/galleryController";
 
 const router = Router();
 
-router.get("/user/:userId", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+router.get("/user", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   await getUserGalleries(req, res);
 });
+
 
 router.post("/save", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   await saveGallery(req, res);
 });
 
-router.get("/user", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
-  await getUserGalleries(req, res);
-});
-
-router.get("/", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
-  await getGalleries(req, res);
-});
 
 router.post("/", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   await createGallery(req, res);
