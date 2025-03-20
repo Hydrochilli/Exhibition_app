@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import bcrypt from "bcrypt";
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Make sure this is set in .env
+  connectionString: process.env.DATABASE_URL, 
 });
 
 export type User = {
@@ -15,7 +15,7 @@ export type User = {
   city?: string;
 };
 
-// Hash password before storing
+
 export async function createUser(user: User): Promise<User | null> {
   const hashedPassword = await bcrypt.hash(user.password, 10);
 
@@ -34,7 +34,7 @@ export async function createUser(user: User): Promise<User | null> {
   }
 }
 
-// Fetch user by email
+
 export async function findUserByEmail(email: string) {
   try {
     console.log("Checking for user with email:", email);

@@ -1,5 +1,4 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-// src/components/CollectionCards.tsx
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchEuropeanaCollections } from "../api/europeanaApi";

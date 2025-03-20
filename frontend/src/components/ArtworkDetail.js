@@ -5,9 +5,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { fetchSingleArtwork as fetchMetDetail } from "../api/metApi";
 import { fetchSingleClevelandArtwork } from "../api/clevelandApi";
 const ArtworkDetail = () => {
-    // artworkId from the URL param
     const { artworkId } = useParams();
-    // to read optional router state
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -18,7 +16,7 @@ const ArtworkDetail = () => {
         (async () => {
             try {
                 setLoading(true);
-                const source = location.state?.source || "Met"; // fallback
+                const source = location.state?.source || "Met";
                 let data = null;
                 if (source === "Cleveland") {
                     data = await fetchSingleClevelandArtwork(artworkId);

@@ -1,4 +1,3 @@
-// src/services/clevelandService.ts
 import fetch, { Response } from "node-fetch";
 
 
@@ -16,12 +15,10 @@ export async function fetchFromCleveland(
   century?: string,
   department?: string
 ): Promise<Artwork[]> {
-  // Build query similarly
+
   const url = new URL("https://openaccess-api.clevelandart.org/api/artworks");
   url.searchParams.set("q", searchTerm);
-  // if century => do minYear, maxYear, etc.
-  // if department => do department or textual approach
-  // ...
+
   
   const resp = await fetch(url.toString());
   if (!resp.ok) {

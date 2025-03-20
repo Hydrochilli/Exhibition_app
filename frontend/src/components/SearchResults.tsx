@@ -41,12 +41,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     if (!searchTerm) return;
 
     setLoading(true);
-    setCurrentPage(1); // reset pagination when search changes
+    setCurrentPage(1); 
 
     fetchUnifiedSearch(searchTerm, century, department, selectedApi)
       .then((results) => {
         setArtworks(results);
-        // calculate how many pages we need
+   
         setTotalPages(Math.ceil(results.length / ITEMS_PER_PAGE));
       })
       .catch((err) => {
@@ -59,7 +59,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   if (!searchTerm) return <div>Please enter a search term.</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
-  // Sorting logic (from your old code)
+ 
   const parseDate = (dateStr: string): number => {
     if (!dateStr || dateStr.toLowerCase() === "unknown") return Infinity;
     const bcMatch = dateStr.match(/(\d+)\s*BC/i);
@@ -88,7 +88,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     }
   });
 
-  // Pagination
+
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedResults = sortedArtworks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
@@ -96,7 +96,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     <div className="container mx-auto p-4">
       <h2 className="text-xl font-semibold mt-6">Results for "{searchTerm}"</h2>
 
-      {/* Sort Options */}
+     
       <div className="flex flex-col md:flex-row gap-4 justify-center my-4">
         <div>
           <label className="block mb-1 font-semibold">Sort By</label>
@@ -115,14 +115,14 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         </div>
       </div>
 
-      {/* Artwork Cards */}
+     
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         {paginatedResults.map((art) => (
           <ArtworkCard key={art.id} artwork={art} />
         ))}
       </div>
 
-      {/* Pagination Controls (Using onPrev / onNext) */}
+
       {totalPages > 1 && (
         <PaginationControls
           currentPage={currentPage}

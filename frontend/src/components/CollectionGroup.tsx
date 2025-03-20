@@ -1,4 +1,4 @@
-// src/components/CollectionGroup.tsx
+
 import React, { useState, useEffect } from "react";
 import { fetchEuropeanaCollections } from "../api/europeanaApi";
 import { Link } from "react-router-dom";
@@ -37,7 +37,6 @@ const CollectionGroup: React.FC<CollectionGroupProps> = ({ title, query }) => {
   if (loading) return <div>Loading {title} collections...</div>;
   if (error) return <div>Error loading {title} collections: {error}</div>;
 
-  // Filter out collections with no image or a default note
   const filteredCollections = collections.filter(
     (collection) =>
       collection.imageUrl && collection.imageUrl.trim() !== "" &&

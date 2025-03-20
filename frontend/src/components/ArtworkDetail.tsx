@@ -10,14 +10,14 @@ interface Artwork {
   author: string;
   date: string;
   imageUrl: string;
-  source: string; // "Met" or "Cleveland"
+  source: string;
   description: string | null;
 }
 
 const ArtworkDetail: React.FC = () => {
-  // artworkId from the URL param
+
   const { artworkId } = useParams<{ artworkId: string }>();
-  // to read optional router state
+
   const location = useLocation() as { state?: { source?: string } };
 
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ const ArtworkDetail: React.FC = () => {
         setLoading(true);
 
     
-        const source = location.state?.source || "Met"; // fallback
+        const source = location.state?.source || "Met";
 
         let data: Artwork | null = null;
         if (source === "Cleveland") {

@@ -1,12 +1,10 @@
-// src/controllers/searchController.ts
 import { Request, Response } from "express";
 import { getSearchResults } from "../services/cacheService";
 
-// Example query: GET /api/search?q=van+gogh&century=19&department=European
 export async function handleSearch(req: Request, res: Response) {
   try {
     const { q, century, department, apiSource } = req.query;
-    // We'll parse them as strings
+
     const searchTerm = (q as string) || "";
     const centuryStr = (century as string) || "";
     const deptStr = (department as string) || "";

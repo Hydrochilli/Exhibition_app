@@ -1,16 +1,13 @@
-// src/api/europeanaApi.ts
 import axios from "axios";
-const EUROPEANA_BASE_URL = "http://localhost:3001/api/europeana"; // Replaced with proxy endpoint
+const EUROPEANA_BASE_URL = "http://localhost:3001/api/europeana"; 
 const EUROPEANA_API_KEY = import.meta.env.VITE_EUROPEANA_KEY;
-/**
- * Fetch artworks from Europeana using searchTerm, paging, and optional filters.
- */
+
 export const fetchEuropeanaArtworks = async (searchTerm, page, pageSize, typeFilter, centuryFilter) => {
     try {
         console.log(`Fetching artworks for searchTerm: "${searchTerm}"...`);
-        // Build an array of qf filters if they exist
+       
         const qfParams = [];
-        // If user selected a type, e.g. "IMAGE", "VIDEO", "SOUND", etc.
+        
         if (typeFilter) {
             qfParams.push(`TYPE:${typeFilter}`);
         }
@@ -99,7 +96,7 @@ export const fetchEuropeanaCollections = async (queryParam) => {
             params: {
                 wskey: EUROPEANA_API_KEY,
                 query: queryParam,
-                qf: "TYPE:IMAGE", // Hard-coded example
+                qf: "TYPE:IMAGE", 
                 rows: 20,
             },
         });

@@ -1,4 +1,3 @@
-// src/api/europeanaEntityApi.ts
 import axios from "axios";
 
 const EUROPEANA_ENTITY_BASE_URL = "https://api.europeana.eu/entity/search";

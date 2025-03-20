@@ -1,5 +1,4 @@
 import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
-// src/components/CollectionGroup.tsx
 import { useState, useEffect } from "react";
 import { fetchEuropeanaCollections } from "../api/europeanaApi";
 import { Link } from "react-router-dom";
@@ -26,7 +25,6 @@ const CollectionGroup = ({ title, query }) => {
         return _jsxs("div", { children: ["Loading ", title, " collections..."] });
     if (error)
         return _jsxs("div", { children: ["Error loading ", title, " collections: ", error] });
-    // Filter out collections with no image or a default note
     const filteredCollections = collections.filter((collection) => collection.imageUrl && collection.imageUrl.trim() !== "" &&
         collection.description && collection.description.trim() !== "" &&
         collection.description !== "No description available");
