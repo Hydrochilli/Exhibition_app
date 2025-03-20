@@ -9,10 +9,10 @@ import {
 
 const router = Router();
 
-// router.get("/user", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
-//   await getUserGalleries(req, res);
-// });
-router.get("/user", requireAuth, getUserGalleries);
+router.get("/user", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+  await getUserGalleries(req, res);
+});
+
 
 
 
