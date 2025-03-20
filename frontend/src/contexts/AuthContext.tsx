@@ -6,7 +6,6 @@ type User = {
   email: string;
   name?: string;
   avatarUrl?: string;
-  city?: string;
   token: string;
 };
 
@@ -24,7 +23,7 @@ type RegisterData = {
   password: string;
   name?: string;
   avatarUrl?: string;
-  city?: string;
+  
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const login = async (email: string, password: string) => {
-    const res = await fetch("http://localhost:3001/api/auth/login", {
+    const res = await fetch("https://exhibition-app.onrender.com/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -73,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (userData: RegisterData) => {
     try {
       console.log("📩 Sending Registration Data:", userData);
-      const res = await fetch("http://localhost:3001/api/auth/register", {
+    const res = await fetch("https://exhibition-app.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),

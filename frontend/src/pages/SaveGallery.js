@@ -11,7 +11,7 @@ const SaveGallery = () => {
         const collection = JSON.parse(localStorage.getItem("temporaryCollection") || "[]");
         if (collection.length === 0)
             return alert("No items to save!");
-        const response = await fetch("http://localhost:3001/api/gallery/create", {
+        const response = await fetch("https://exhibition-app.onrender.com/api/gallery/create", {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${user?.token}` },
             body: JSON.stringify({ title, description, artworks: collection }),

@@ -6,12 +6,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret"; // Ensure you have JWT_SECRET in .env
+const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret"; 
 
-// **REGISTER FUNCTION**
+
 export async function register(req: Request, res: Response) {
   try {
-    console.log("📩 Incoming Registration Request:", req.body); // Debugging Log
+    console.log("📩 Incoming Registration Request:", req.body); 
 
     const { email, username, password, name, avatarUrl} = req.body;
 
@@ -20,17 +20,16 @@ export async function register(req: Request, res: Response) {
       return res.status(400).json({ message: "Email, username, and password are required" });
     }
 
-    // Check if user already exists
+   
     const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
     if (existingUser.rows.length > 0) {
       console.error("⚠️ User already exists:", email);
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert new user
     const newUser = await pool.query(
       "INSERT INTO users (email, username, password_hash, name, avatar_url) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [email, username, hashedPassword, name || "", avatarUrl || ""]
@@ -38,7 +37,6 @@ export async function register(req: Request, res: Response) {
 
     console.log("✅ User Registered:", newUser.rows[0]);
 
-    // Generate JWT Token
     const token = jwt.sign({ userId: newUser.rows[0].id }, SECRET_KEY, { expiresIn: "7d" });
 
     return res.status(201).json({
@@ -57,10 +55,10 @@ export async function register(req: Request, res: Response) {
   }
 }
 
-// **LOGIN FUNCTION**
+
 export async function login(req: Request, res: Response) {
   try {
-    console.log("🔑 Incoming Login Request:", req.body); // Debugging Log
+    console.log("🔑 Incoming Login Request:", req.body);
 
     const { email, password } = req.body;
     if (!email || !password) {
@@ -75,7 +73,7 @@ export async function login(req: Request, res: Response) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Compare password
+
     const validPassword = await bcrypt.compare(password, user.rows[0].password_hash);
     if (!validPassword) {
       console.error("❌ Invalid password for user:", email);
@@ -84,7 +82,6 @@ export async function login(req: Request, res: Response) {
 
     console.log("✅ User Logged In:", user.rows[0].email);
 
-    // Generate JWT Token
     const token = jwt.sign({ userId: user.rows[0].id }, SECRET_KEY, { expiresIn: "7d" });
 
     return res.json({

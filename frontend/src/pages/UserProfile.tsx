@@ -31,7 +31,7 @@ const UserProfile: React.FC = () => {
         console.log(`Fetching galleries for user ID: ${user.id}`);
 
         const response = await fetch(
-          `http://localhost:3001/api/galleries/user/${user.id}`,
+          `https://exhibition-app.onrender.com/api/galleries/user/${user.id}`,
           {
             headers: { Authorization: `Bearer ${user.token}` },
           }
@@ -71,9 +71,6 @@ const UserProfile: React.FC = () => {
             {user.name || user.username}
           </Typography>
           <Typography variant="body1">{user.email}</Typography>
-          <Typography variant="body2" color="textSecondary">
-            {user.city || "Location not set"}
-          </Typography>
           <Button
             component={Link}
             to="/edit-profile"

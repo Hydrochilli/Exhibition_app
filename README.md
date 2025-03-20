@@ -3,7 +3,7 @@
 
 https://exhibition-curation.netlify.app/
 
-## Note - About the Homepage
+## Note - Homepage Under Construction - Search Works - Links May not Work
 Whilst you can currently search for and add artworks to a  'Temporary Gallery', our homepage is currently being built and we soon hope to add pre-curated galleries. Currently you may click on an image (which will soon be) linking to one of these curated galleries -such as those under 'Themes', and be taken to a blank page, but this will soon be filled with curated artworks and artefacts from the curated gallery.  
 
 ## Overview

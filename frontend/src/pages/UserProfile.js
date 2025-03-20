@@ -19,7 +19,7 @@ const UserProfile = () => {
                 return;
             try {
                 console.log(`Fetching galleries for user ID: ${user.id}`);
-                const response = await fetch(`http://localhost:3001/api/galleries/user/${user.id}`, {
+                const response = await fetch(`https://exhibition-app.onrender.com/api/galleries/user/${user.id}`, {
                     headers: { Authorization: `Bearer ${user.token}` },
                 });
                 if (!response.ok) {
@@ -41,6 +41,6 @@ const UserProfile = () => {
         }
         fetchGalleries();
     }, [user]);
-    return (_jsxs("div", { className: "container mx-auto p-4 grid gap-6", children: [_jsx(Card, { className: "p-4 shadow-lg", children: _jsxs(CardContent, { className: "text-center", children: [_jsx(Avatar, { src: user.avatarUrl, alt: user.username, sx: { width: 80, height: 80, margin: "auto" } }), _jsx(Typography, { variant: "h5", className: "mt-2", children: user.name || user.username }), _jsx(Typography, { variant: "body1", children: user.email }), _jsx(Typography, { variant: "body2", color: "textSecondary", children: user.city || "Location not set" }), _jsx(Button, { component: Link, to: "/edit-profile", variant: "contained", color: "primary", className: "mt-3", children: "Edit Profile" })] }) }), _jsx(Card, { className: "p-4 shadow-lg", children: _jsxs(CardContent, { children: [_jsx(Typography, { variant: "h6", children: "My Collections" }), loading ? (_jsx(Typography, { color: "textSecondary", children: "Loading galleries..." })) : error ? (_jsx(Typography, { color: "error", children: error })) : galleries.length > 0 ? (_jsx(List, { children: galleries.map((gallery) => (_jsx(ListItem, { component: Link, to: `/gallery/${gallery.id}`, className: "hover:bg-gray-100 cursor-pointer", children: _jsx(Typography, { children: gallery.title }) }, gallery.id))) })) : (_jsxs(Typography, { children: ["No collections yet. ", _jsx(Link, { to: "/", children: "Start curating!" })] }))] }) })] }));
+    return (_jsxs("div", { className: "container mx-auto p-4 grid gap-6", children: [_jsx(Card, { className: "p-4 shadow-lg", children: _jsxs(CardContent, { className: "text-center", children: [_jsx(Avatar, { src: user.avatarUrl, alt: user.username, sx: { width: 80, height: 80, margin: "auto" } }), _jsx(Typography, { variant: "h5", className: "mt-2", children: user.name || user.username }), _jsx(Typography, { variant: "body1", children: user.email }), _jsx(Button, { component: Link, to: "/edit-profile", variant: "contained", color: "primary", className: "mt-3", children: "Edit Profile" })] }) }), _jsx(Card, { className: "p-4 shadow-lg", children: _jsxs(CardContent, { children: [_jsx(Typography, { variant: "h6", children: "My Collections" }), loading ? (_jsx(Typography, { color: "textSecondary", children: "Loading galleries..." })) : error ? (_jsx(Typography, { color: "error", children: error })) : galleries.length > 0 ? (_jsx(List, { children: galleries.map((gallery) => (_jsx(ListItem, { component: Link, to: `/gallery/${gallery.id}`, className: "hover:bg-gray-100 cursor-pointer", children: _jsx(Typography, { children: gallery.title }) }, gallery.id))) })) : (_jsxs(Typography, { children: ["No collections yet. ", _jsx(Link, { to: "/", children: "Start curating!" })] }))] }) })] }));
 };
 export default UserProfile;

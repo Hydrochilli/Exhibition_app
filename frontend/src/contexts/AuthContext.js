@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
     const login = async (email, password) => {
-        const res = await fetch("http://localhost:3001/api/auth/login", {
+        const res = await fetch("https://exhibition-app.onrender.com/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         try {
             console.log("📩 Sending Registration Data:", userData);
-            const res = await fetch("http://localhost:3001/api/auth/register", {
+            const res = await fetch("https://exhibition-app.onrender.com/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),
