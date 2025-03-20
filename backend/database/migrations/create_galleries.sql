@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS galleries (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS gallery_artworks (
+  id SERIAL PRIMARY KEY,
+  gallery_id INTEGER REFERENCES galleries(id) ON DELETE CASCADE,
+  external_id VARCHAR(255) NOT NULL,
+  source VARCHAR(255) NOT NULL,
+  title VARCHAR(255),
+  author VARCHAR(255),
+  date VARCHAR(255),
+  image_url TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
