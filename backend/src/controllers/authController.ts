@@ -32,7 +32,7 @@ export async function register(req: Request, res: Response) {
 
     // Insert new user
     const newUser = await pool.query(
-      "INSERT INTO users (email, username, password_hash, name, avatar_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      "INSERT INTO users (email, username, password_hash, name, avatar_url) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [email, username, hashedPassword, name || "", avatarUrl || ""]
     );
 
