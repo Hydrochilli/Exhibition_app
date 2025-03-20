@@ -95,7 +95,7 @@ export async function login(req: Request, res: Response) {
         username: user.rows[0].username,
         name: user.rows[0].name,
         avatarUrl: user.rows[0].avatar_url,
-        city: user.rows[0].nearest_city,
+       
       },
     });
   } catch (error) {
