@@ -39,7 +39,7 @@ const TemporaryCollection: React.FC = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/galleries/save", {
+      const response = await fetch("https://exhibition-app.onrender.com/api/galleries/save", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
