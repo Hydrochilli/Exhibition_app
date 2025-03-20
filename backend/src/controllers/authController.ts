@@ -13,7 +13,7 @@ export async function register(req: Request, res: Response) {
   try {
     console.log("📩 Incoming Registration Request:", req.body); // Debugging Log
 
-    const { email, username, password, name, avatarUrl, city } = req.body;
+    const { email, username, password, name, avatarUrl} = req.body;
 
     if (!email || !username || !password) {
       console.error("❌ Missing required fields");
@@ -32,8 +32,8 @@ export async function register(req: Request, res: Response) {
 
     // Insert new user
     const newUser = await pool.query(
-      "INSERT INTO users (email, username, password_hash, name, avatar_url, nearest_city) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [email, username, hashedPassword, name || "", avatarUrl || "", city || ""]
+      "INSERT INTO users (email, username, password_hash, name, avatar_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [email, username, hashedPassword, name || "", avatarUrl || ""]
     );
 
     console.log("✅ User Registered:", newUser.rows[0]);
@@ -49,8 +49,7 @@ export async function register(req: Request, res: Response) {
         username: newUser.rows[0].username,
         name: newUser.rows[0].name,
         avatarUrl: newUser.rows[0].avatar_url,
-        city: newUser.rows[0].nearest_city,
-      },
+       },
     });
   } catch (error) {
     console.error("🔥 Registration Error:", error);

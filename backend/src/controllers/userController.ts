@@ -9,5 +9,5 @@ export async function getUserProfile(req: Request, res: Response) {
     return res.status(404).json({ error: "User not found" });
   }
 
-  res.json({ id: user.id, username: user.username, email: user.email, name: user.name, avatarUrl: user.avatarUrl, city: user.city });
+  res.json({ id: user.id, username: user.username, email: user.email, name: user.name, avatarUrl: user.avatarUrl });
 }
